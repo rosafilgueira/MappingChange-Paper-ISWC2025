@@ -87,6 +87,7 @@ bundle install
 
 - 📘 Main project repo: [MappingChange on GitHub](https://github.com/francesNLP/MappingChange)
 - 📘 Ontology repo: [HeritageTextOntology](https://github.com/frances-ai/HeritageTextOntology)
+- 📘 Ontology documentation: [HeritageTextOntology](http://w3id.org/hto)
 - 🌐 Live HTO Docs: [https://frances-ai.github.io/HeritageTextOntology](https://frances-ai.github.io/HeritageTextOntology)
 
 ---
