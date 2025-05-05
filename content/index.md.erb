@@ -1,15 +1,16 @@
 ---
-title: "My Awesome Article"
+title: Mapping Change: A Temporal Knowledge Graph of Scottish Gazetteers (1803–1901)
+author:
+  - name: Lilin Yu
+    affiliation: EPCC, University of Edinburgh
+    email: L.Yu-40@sms.ed.ac.uk
+  - name: Rosa Filgueira
+    affiliation: EPCC, University of Edinburgh
+    email: r.filgueira@epcc.ed.ac.uk
 ---
+
 <header markdown="1">
 # <%= @item[:title] %>
-
-{:#authors}
-- <%= person 'John Doe', 'http://www.example.org/', 'http://www.example.org/#me' %>
-
-{:#affiliations}
-- {:#myaffiliation} Awesome Inc.
-
 </header>
 
 <!-- Hack to make our custom fonts load in print-mode -->
@@ -25,9 +26,18 @@ title: "My Awesome Article"
 <main>
   <!-- Add sections by specifying their file name, excluding the '.md' suffix. -->
   <%= section 'introduction' %>
+  <%= section 'related-work' %>
+  <%= section 'resource-description' %>
+  <%= section 'heritage-textual-ontology' %>
+  <%= section 'construction-and-content' %>
+  <%= section 'usage' %>
+  <%= section 'evaluation' %>
+  <%= section 'sustainability' %>
+  <%= section 'conclusion' %>
+  <%= section 'acknowledgements' %>
+  <%= section 'references' %>
 </main>
 
 <footer></footer>
+</div>
 
-</div>
-</div>
