@@ -1,15 +1,6 @@
 ## Abstract
-<!-- Context      -->
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-<!-- Need         -->
-Vestibulum finibus dignissim augue, id pellentesque est facilisis non.
-<!-- Task         -->
-Donec fringilla dolor non neque iaculis blandit.
-<!-- Object       -->
-Praesent aliquet eleifend iaculis.
-<!-- Findings     -->
-Quisque pellentesque at odio ac bibendum.
-<!-- Conclusion   -->
-Pellentesque imperdiet felis urna, quis facilisis lacus gravida non.
-<!-- Perspectives -->
-Donec quis lectus eget sem tempor tristique pellentesque in dolor.
+
+We present *Mapping Change*, a temporal and semantic knowledge graph derived from ten 19th-century Gazetteers of Scotland (1803–1901). This resource semantically enriches over 50,000 digitized place descriptions using GPT-4-based information extraction, custom prompt engineering tailored to each gazetteer edition, entity disambiguation, and ontology-driven modeling. A key innovation lies in adapting large language models and heuristics to heterogeneous formats across nearly a century of OCR-scanned texts.
+
+The resulting knowledge is structured using the updated [Heritage Textual Ontology (HTO)](https://w3id.org/hto), serialized as RDF, and linked to external sources including [Wikidata](https://www.wikidata.org) and [DBpedia](https://www.dbpedia.org). Enhanced [Elasticsearch](https://www.elastic.co) indices support both full-text and semantic search across editions. The resource integrates into the [Frances](http://www.frances-ai.com) semantic platform, enabling historical, geographical, and linguistic analysis via SPARQL queries, interactive visualizations, and concept timelines. All code is available at [github.com/francesNLP/MappingChange](https://github.com/francesNLP/MappingChange).
+
