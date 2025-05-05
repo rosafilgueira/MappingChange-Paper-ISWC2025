@@ -9,8 +9,14 @@ author:
     email: "r.filgueira@epcc.ed.ac.uk"
 ---
 
-<header markdown="1">
-# <%= @item[:title] %>
+<header>
+  <h1><%= @item[:title] %></h1>
+  <p>
+    <strong>Lilin Yu</strong>, <strong>Rosa Filgueira</strong><br />
+    EPCC, University of Edinburgh<br />
+    <a href="mailto:L.Yu-40@sms.ed.ac.uk">L.Yu-40@sms.ed.ac.uk</a>,
+    <a href="mailto:r.filgueira@epcc.ed.ac.uk">r.filgueira@epcc.ed.ac.uk</a>
+  </p>
 </header>
 
 <!-- Hack to make our custom fonts load in print-mode -->
@@ -29,12 +35,12 @@ author:
   <%= section 'hto' %>
   <%= section 'construction-and-content' %>
   <%= section 'usage' %>
-  <%= section 'evaluation' %>
   <%= section 'sustainability' %>
   <%= section 'conclusion' %>
   <%= section 'acknowledgements' %>
   <%= section 'references' %>
 </main>
+
 
 <footer></footer>
 </div>

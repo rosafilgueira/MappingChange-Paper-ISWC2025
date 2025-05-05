@@ -1,5 +1,3 @@
-## Evaluation
-
 Our evaluation focuses on extraction accuracy, semantic enrichment, and user-facing search and exploration capabilities:
 
 - **Extraction Accuracy**: Manual inspection of GPT-4 outputs across editions shows over 90% correct segmentation and labeling, significantly outperforming rule-based heuristics.

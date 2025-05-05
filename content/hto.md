@@ -1,4 +1,4 @@
-## Heritage Textual Ontology (HTO)
+## Heritage Textual Ontology
 
 The [Heritage Textual Ontology (HTO)](https://w3id.org/hto) provides the semantic backbone for *Mapping Change*, enabling structured representation of historical textual records, their provenance, and evolving place-based concepts. Since its initial release, HTO has undergone substantial refinement to support richer semantic modeling, improved interoperability, and enhanced tracking of digitization workflows and AI-assisted outputs.
 
