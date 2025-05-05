@@ -2,7 +2,8 @@
 
 The [Heritage Textual Ontology (HTO)](https://w3id.org/hto) provides the semantic backbone for *Mapping Change*, enabling structured representation of historical textual records, their provenance, and evolving place-based concepts. Since its initial release, HTO has undergone substantial refinement to support richer semantic modeling, improved interoperability, and enhanced tracking of digitization workflows and AI-assisted outputs.
 
-The ontology is openly developed at [github.com/frances-ai/HeritageTextOntology](https://github.com/frances-ai/HeritageTextOntology), and its documentation, including diagrams and examples, is available at [frances-ai.github.io/HeritageTextOntology](https://frances-ai.github.io/HeritageTextOntology).
+The ontology is openly developed at [github.com/frances-ai/HeritageTextOntology](https://github.com/frances-ai/HeritageTextOntology), and its documentation, including diagrams and examples, is available at [w3id.org/hto](https://w3id.org/hto).
+
 
 ### Key Ontological Enhancements
 
