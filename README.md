@@ -82,11 +82,6 @@ bundle install
 
 ---
 
-## 📜 License
-
-This paper and all accompanying code/data are released under the [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/), unless otherwise specified.
-
----
 
 ## 🔗 Project Links
 
