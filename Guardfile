@@ -1,15 +1,20 @@
-guard 'rack', :port => 3000 do
-  watch 'Gemfile.lock'
+# Rebuild HTML + PDF when content or styles change
+guard :shell do
+  watch(%r{^index\.md\.erb$})
+  watch(%r{^content/.*\.(md|md\.erb)$})
+  watch(%r{^styles/.*\.css$})
+  watch(%r{^.*\.bib$})
+
+  command = "bundle exec scholarmarkdown build && weasyprint output/index.html output/paper.pdf && open output/paper.pdf"
+
+  callback(:run_on_modifications) do |_|
+    puts "[Guard] 🔄 Rebuilding HTML and PDF..."
+    system(command)
+  end
 end
 
-guard :nanoc do
-  watch 'nanoc.yaml'
-  watch 'Rules'
-  watch %r{^(content|layouts|lib)/}
+# Serve files from output/ on http://localhost:3000
+guard 'rack', port: 3000 do
+  watch('config.ru')
 end
 
-guard :livereload do
-  watch(%r{^output/}) { |m| m[0].sub(%r{^output/}, '') }
-end
-
-notification :notifu, :nosound => true
