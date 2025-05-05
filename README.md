@@ -38,6 +38,14 @@ bundle exec nanoc compile
 
 Output will be generated in the `output/` directory. You can open `output/index.html` in a browser or print it to PDF.
 
+
+### Export PDF (WeasyPrint)
+
+After compiling:
+```bash
+weasyprint output/index.html output/paper.pdf
+```
+Make sure weasyprint is installed ([see](https://weasyprint.readthedocs.io/)).
 ---
 
 ## 📁 Repository Structure
@@ -59,7 +67,9 @@ Output will be generated in the `output/` directory. You can open `output/index.
 │   ├── strict-print.css        # Print styling for PDF export
 │   └── screen.scss             # Styling for HTML rendering
 │
-└── output/                     # Compiled HTML/PDF output
+├── output/
+│   ├── index.html              # Rendered HTML
+│   └── paper.pdf               # Exported PDF (after WeasyPrint step)
 ```
 
 ---
@@ -80,6 +90,12 @@ Then install all dependencies:
 bundle install
 ```
 
+You’ll also need weasyprint for PDF export:
+
+```bash
+pip install weasyprint
+```
+
 ---
 
 
@@ -87,7 +103,7 @@ bundle install
 
 - 📘 Main project repo: [MappingChange on GitHub](https://github.com/francesNLP/MappingChange)
 - 📘 Ontology repo: [HeritageTextOntology](https://github.com/frances-ai/HeritageTextOntology)
-- 📘 Ontology documentation: [HeritageTextOntology](http://w3id.org/hto)
+- 📘 Ontology documentation: [HTO at w3id.org](http://w3id.org/hto)
 - 🌐 Live HTO Docs: [https://frances-ai.github.io/HeritageTextOntology](https://frances-ai.github.io/HeritageTextOntology)
 
 ---
