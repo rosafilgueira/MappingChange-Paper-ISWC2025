@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title property="foaf:name schema:name">Mapping Change: A Temporal and Semantic Knowledge Base of Scottish Gazetteers (1803–1901)</title>
+  <link rel="stylesheet" media="screen" href="styles/screen.css" />
+  <link rel="stylesheet" media="print" href="styles/strict-print.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <meta name="citation_title" content="Mapping Change: A Temporal and Semantic Knowledge Base of Scottish Gazetteers (1803–1901)">
+  
+  
+  <meta name="citation_publication_date" content="2025/05/06" />
+</head>
+
+<body prefix="dctypes: http://purl.org/dc/dcmitype/ pimspace: http://www.w3.org/ns/pim/space# rsa: http://www.w3.org/ns/auth/rsa# cert: http://www.w3.org/ns/auth/cert# wgs: http://www.w3.org/2003/01/geo/wgs84_pos# biblio: http://purl.org/net/biblio# bibo: http://purl.org/ontology/bibo/ book: http://purl.org/NET/book/vocab# ov: http://open.vocab.org/terms/ doap: http://usefulinc.com/ns/doap# dbr: http://dbpedia.org/resource/ dbp: http://dbpedia.org/property/ sio: http://semanticscience.org/resource/ opmw: http://www.opmw.org/ontology/ deo: http://purl.org/spar/deo/ doco: http://purl.org/spar/doco/ cito: http://purl.org/spar/cito/ fabio: http://purl.org/spar/fabio/ solid: http://www.w3.org/ns/solid/terms# acl: http://www.w3.org/ns/auth/acl# dio: https://w3id.org/dio# lsc: http://linkedscience.org/lsc/ns#" typeof="schema:CreativeWork sioc:Post prov:Entity lsc:Research">
+  <header>
+  <h1>Mapping Change: A Temporal and Semantic Knowledge Base of Scottish Gazetteers (1803–1901)</h1>
+  <p>
+    <strong>Lilin Yu</strong>, <strong>Rosa Filgueira</strong><br />
+    EPCC, University of Edinburgh<br />
+    <a href="mailto:L.Yu-40@sms.ed.ac.uk">L.Yu-40@sms.ed.ac.uk</a>,
+    <a href="mailto:r.filgueira@epcc.ed.ac.uk">r.filgueira@epcc.ed.ac.uk</a>
+  </p>
+</header>
+
+<!-- Hack to make our custom fonts load in print-mode -->
+<p><span class="printfont1"> </span>
+<span class="printfont2"> </span>
+<span class="printfont3"> </span>
+<span class="printfont4"> </span></p>
+
+<div id="content">
+  <section id="abstract" inlist="" rel="schema:hasPart" resource="#abstract">
+<div datatype="rdf:HTML" property="schema:description">
+      <h2 property="schema:name">Abstract</h2>
+
+      <p>We present <strong><a href="https://github.com/francesNLP/MappingChange">MappingChange</a></strong>, a project that constructs a temporal and semantic knowledge base from ten 19th-century <strong><a href="https://www.nls.uk/">Gazetteers of Scotland</a></strong> (1803–1901), digitized as over 13,000 page-level <strong>XML</strong> files. These noisy, unstructured texts lack article-level markup and exhibit highly heterogeneous layouts. To segment and structure over 50,000 historical place descriptions, we employ <strong>large language models (LLMs)</strong> with <strong>volume-specific prompting strategies</strong>, tuned to handle distinct editorial conventions, abbreviations, and multi-page entries.</p>
+
+      <p>The resulting <strong><a href="https://github.com/francesNLP/MappingChange">GazetteersScotland-KG</a></strong> comprises three interlinked knowledge graphs: (1) a <strong>basic KG</strong>, extracted from cleaned DataFrames; (2) a <strong>concept-enriched KG</strong>, linking semantically similar place records across editions using <strong>sentence embeddings</strong>, <strong>Wikidata</strong>, and <strong>DBpedia</strong>; and (3) a <strong>location-annotated KG</strong>, enriched with <strong>named entity recognition</strong> and <strong>geographic disambiguation</strong>. All are expressed in <strong><a href="https://www.w3.org/RDF/">RDF</a></strong> and modeled with the updated <strong><a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a></strong>, which captures textual provenance, prompt metadata, record lineage, and concept evolution.</p>
+
+    </div>
+</section>
+
+
+<main>
+  <section id="introduction" inlist="" rel="schema:hasPart" resource="#introduction">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Introduction</h2>
+
+        <p>Descriptive gazetteers were central to how 19th-century Scotland documented its geography—towns, parishes, rivers, castles, lochs, and glens—embedding each place within broader historical, economic, and social narratives. These texts evolved over the century, reflecting transformations brought about by industrialization, land reform, public health, and imperial expansion. The <em>Gazetteers of Scotland, 1803–1901</em>, digitized by the <a href="https://data.nls.uk/data/digitised-collections">National Library of Scotland (NLS)</a>, constitute one of the most comprehensive corpora for studying Scotland’s spatial knowledge in the long 19th century. The full collection comprises twenty volumes produced by different publishers and editors, and has been released as more than 13,000 high-resolution scans accompanied by <a href="https://www.loc.gov/standards/alto/">ALTO XML</a> files. These XML files encode layout and textual content extracted via Optical Character Recognition (OCR), resulting in over 1.75 million lines and 14 million words. While this makes the data technically accessible, it remains largely unsuitable for structured analysis: the texts lack article-level markup, exhibit inconsistent typographic structures, and contain significant OCR noise. Entries often begin mid-column, span multiple pages, and vary widely in format and editorial style—posing major challenges for computational processing, information retrieval, and historical reuse.</p>
+
+        <p>Compounding these challenges is the fact that many place names (e.g., “ABBEY” or “GREENHILL”) recur across the gazetteers, often referring to different locations. Disambiguating such entries is non-trivial, as it depends on contextual clues within each article rather than surface-level patterns. Our approach relies on LLM-based article segmentation and interpretation—capturing subtle editorial cues and semantic context to correctly associate each name with the appropriate description.</p>
+
+        <p><em>MappingChange</em> is the first project to construct a structured, queryable, and semantically enriched temporal knowledge base from this entire collection. We extract and align over 50,000 historical place descriptions across ten gazetteer editions, using large language models (LLMs) and volume-specific prompting strategies that are carefully tuned to editorial idiosyncrasies. The result is a knowledge base composed of three interlinked knowledge graphs: a basic graph derived from structured DataFrames; a concept-enriched graph linking semantically similar entries across editions using sentence embeddings, <a href="https://www.wikidata.org">Wikidata</a>, and <a href="https://www.dbpedia.org">DBpedia</a>; and a location-annotated graph generated through geographic disambiguation techniques. These graphs are serialized in <a href="https://www.w3.org/RDF/">RDF</a> and modeled using the <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a>, a domain ontology we developed specifically for historical and heritage corpora.</p>
+
+        <p>The <strong>Heritage Textual Ontology (HTO)</strong> (see resource <a href="https://w3id.org/hto#InformationResource">here</a>) is designed to model not just entities and attributes but also the editorial and computational processes by which each record is extracted, cleaned, and enriched. Unlike generic ontologies, HTO supports the representation of textual provenance, extraction prompts, editorial hierarchies, and diachronic linkage across editions. It enables us to track how descriptions of the same place evolve over time, with full transparency into their source structure and transformation process. Its design has been guided by real-world use cases in digital heritage, and it plays a central role in making the resulting knowledge graphs both expressive and reproducible.</p>
+
+        <p>The complexity and variability of these sources can be seen in Figure 1, which presents the opening pages of two editions: the 1803 <em>Gazetteer of Scotland</em> and the 1884 <em>Ordnance Gazetteer of Scotland</em>. These differences, compounded across volumes, necessitate a custom approach to segmentation, prompting, and post-processing—especially since no edition includes machine-readable metadata or reliable article delimiters. Note that articles can span multiple pages, but there is no page-level indication of article continuation.</p>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1em;">
+  <div style="flex: 1; text-align: center;">
+    <img src="images/1803-gazetteer-page.jpg" alt="First page of the 1803 Gazetteer of Scotland" style="max-width: 180px; height: auto; border: 1px solid #ccc;" />
+    <p style="font-size: 0.9em;">
+      <strong>Figure 1 (left):</strong> Opening entries of the 1803 <em>Gazetteer of Scotland</em>. Page headers consist of two three-letter uppercase segments (e.g., “ABB ABE”). Place names appear in all caps, typically followed by a period or semicolon—offering minimal typographic separation between entries.
+    </p>
+  </div>
+  <div style="flex: 1; text-align: center;">
+    <img src="images/1884-gazetteer-page.jpg" alt="First page of the 1884 Ordnance Gazetteer of Scotland" style="max-width: 200px; height: auto; border: 1px solid #ccc;" />
+    <p style="font-size: 0.9em;">
+      <strong>Figure 1 (right):</strong> Opening entries of the 1884 <em>Ordnance Gazetteer of Scotland</em>. This edition presents visually clearer structure, with entries formatted in title case and followed by commas. However, it introduces long, multi-paragraph articles with historical digressions and cross-references—necessitating more refined prompting strategies for accurate segmentation.
+    </p>
+  </div>
+</div>
+
+        <p>Of the twenty volumes in the NLS dataset, we process ten as fully descriptive gazetteers with complete metadata and dual-volume structure. We exclude the 1828 edition, which is a town-focused summary rather than a gazetteer, and the 1848 edition, for which only Volume II survives. All ten processed volumes are mapped into structured DataFrames, knowledge graphs, and <a href="https://www.elastic.co/">Elasticsearch</a> indices that enable full-text and vector-based semantic search. These resources are deployed via the <a href="http://www.frances-ai.com">Frances</a> semantic web platform, allowing users to explore the evolution of Scottish place descriptions through <a href="https://www.w3.org/TR/rdf-sparql-query/">SPARQL</a> queries, concept timelines, and geolinguistic visualizations. All code and data are openly available at <a href="https://github.com/francesNLP/MappingChange">github.com/francesNLP/MappingChange</a>.</p>
+
+        <p>This work offers a reusable digital resource that transforms a historically important but structurally inaccessible corpus into a machine-readable knowledge base for temporal, geographical, and linguistic analysis—paving the way for new forms of linked data research in cultural heritage and historical geography.</p>
+
+        <p>The remainder of this paper is structured as follows. Section 2 reviews related work on gazetteer digitization, knowledge base construction, and the use of language models for historical document processing. Section 3 introduces the Heritage Textual Ontology (HTO), including its conceptual model and alignment with other semantic vocabularies. Section 4 details the end-to-end <em>MappingChange</em> pipeline, from OCR ingestion and LLM-based segmentation to DataFrame creation and RDF serialization. Section 5 presents the construction of the three interlinked knowledge graphs and their semantic enrichment through embeddings, entity linking, and location annotation. Section 6 describes the integration of all outputs into the Frances semantic platform, highlighting search, querying, and visual exploration capabilities. Section 7 provides qualitative examples and a usage scenario illustrating how the knowledge base supports temporal and comparative analysis of Scottish place descriptions. Section 8 concludes with a summary of contributions and discusses directions for future work.</p>
+
+      </div>
+</section>
+
+  <section id="related-work" inlist="" rel="schema:hasPart" resource="#related-work">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Related Work</h2>
+
+        <p>Efforts to structure historical textual data have increasingly turned to Semantic Web technologies. Projects like Linked Places, WarSampo, and Enslaved.org demonstrate how knowledge graphs can model entities, events, and relationships from historical sources. Similarly, national libraries have applied OCR and metadata modeling to digitize collections, such as the NLS’s Data Foundry.</p>
+
+        <p>Our work builds on this tradition while addressing unique challenges presented by 19th-century gazetteers: noisy OCR, lack of structural markup, and inconsistent editorial conventions. Prior methods using rule-based extraction or statistical models fall short when applied to these irregular texts. Recent advances using large language models (LLMs) like GPT-4 show promise in segmenting, interpreting, and linking historical content. We apply such models at scale, with edition-specific prompting strategies and custom cleaning heuristics, to generate reliable article-level entries and semantic annotations.</p>
+
+        <p>Our ontology-driven approach aligns with recent efforts like the EB Ontology, NLS Ontology, and the Enslaved Ontology, but introduces the more flexible and extensible Heritage Textual Ontology (HTO), designed specifically for long-range temporal comparison and provenance tracking across multiple editions and digitization methods.</p>
+
+      </div>
+</section>
+
+  <section id="resource-description" inlist="" rel="schema:hasPart" resource="#resource-description">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Resource Description</h2>
+
+        <p><em>Mapping Change</em> includes:</p>
+
+        <ul>
+          <li>Ten digitized Gazetteers of Scotland (1803–1901) from the <a href="https://data.nls.uk/data/metadata-collections/">NLS Digital Repository</a>.</li>
+          <li>Over 50,000 extracted articles, segmented and structured using GPT-4 prompts tailored to each volume.</li>
+          <li>Volume-specific JSON DataFrames enriched with metadata, identifiers, and embeddings.</li>
+          <li>An RDF/Turtle knowledge graph using the <a href="https://github.com/frances-ai/HeritageTextOntology">HTO ontology</a>.</li>
+          <li>Entity links to <a href="https://www.wikidata.org">Wikidata</a> and <a href="https://www.dbpedia.org">DBpedia</a>.</li>
+          <li><a href="https://www.elastic.co">Elasticsearch</a> indices supporting both keyword and vector similarity search.</li>
+          <li>Full integration with the <a href="http://www.frances-ai.com">Frances</a> semantic web platform.</li>
+        </ul>
+
+        <p>All code and data are publicly available via <a href="https://github.com/francesNLP/MappingChange">github.com/francesNLP/MappingChange</a>.</p>
+
+      </div>
+</section>
+
+  <section id="heritage-textual-ontology" inlist="" rel="schema:hasPart" resource="#heritage-textual-ontology">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Heritage Textual Ontology</h2>
+
+        <p>The <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a> provides the semantic backbone for <em>Mapping Change</em>, enabling structured representation of historical textual records, their provenance, and evolving place-based concepts. Since its initial release, HTO has undergone substantial refinement to support richer semantic modeling, improved interoperability, and enhanced tracking of digitization workflows and AI-assisted outputs.</p>
+
+        <p>The ontology is openly developed at <a href="https://github.com/frances-ai/HeritageTextOntology">github.com/frances-ai/HeritageTextOntology</a>, and its documentation, including diagrams and examples, is available at <a href="https://w3id.org/hto">w3id.org/hto</a>.</p>
+
+        <h3 id="key-ontological-enhancements">Key Ontological Enhancements</h3>
+
+        <ul>
+          <li>
+            <p><strong>Textual Record Modeling</strong>: New classes such as <code>HTO:Article</code>, <code>HTO:PlaceRecord</code>, <code>HTO:InternalRecord</code>, and <code>HTO:TermRecord</code> differentiate between OCR-extracted fragments, cleaned entries, and semantically disambiguated concepts. The <code>HTO:Description</code> class tracks structured outputs from GPT-4, manual annotations, or post-processing tools.</p>
+          </li>
+          <li>
+            <p><strong>Digitization Provenance</strong>: Bibliographic metadata is modeled using <code>HTO:Work</code>, <code>HTO:Volume</code>, and <code>HTO:Edition</code>, with provenance relationships defined via <a href="https://www.w3.org/TR/prov-o/">PROV-O</a> and <a href="https://schema.org">schema.org</a>. Each <code>HTO:Article</code> is linked to its digitized source via permanent NLS page URLs and includes annotations such as <code>HTO:textQuality</code> to assess OCR accuracy and reliability.</p>
+          </li>
+          <li>
+            <p><strong>LLM Provenance and Prompt Modeling</strong>: The new class <code>HTO:InformationResource</code> represents prompt templates, LLM configurations, and model-generated outputs, enabling full traceability of GPT-based extractions. This supports transparent reuse, auditing, and future replication.</p>
+          </li>
+          <li>
+            <p><strong>Concept Evolution and Semantic Clustering</strong>: <code>HTO:Concept</code> is used in combination with <a href="https://www.w3.org/TR/skos-reference/">SKOS</a> to group equivalent or evolving place references across multiple gazetteer editions. Concepts can represent locations, institutions, or geographical types and are dynamically inferred from embeddings and term clustering.</p>
+          </li>
+          <li>
+            <p><strong>Geographic and Type Annotation</strong>: The ontology introduces <code>HTO:GeographicAnnotation</code> for storing lat/lon coordinates derived from external services or contextual inference. It also includes <code>HTO:LocationType</code> for classifying place categories (e.g., parish, river, estate).</p>
+          </li>
+          <li>
+            <p><strong>Linking and External Alignment</strong>: Instances of <code>HTO:PlaceRecord</code> and <code>HTO:Concept</code> may include links to external resources using <code>HTO:externalMatch</code>, allowing interconnection with <a href="https://www.wikidata.org">Wikidata</a>, <a href="https://www.dbpedia.org">DBpedia</a>, and other knowledge bases.</p>
+          </li>
+          <li>
+            <p><strong>Lineage and Versioning Support</strong>: Using <code>HTO:wasDerivedFrom</code>, <code>HTO:wasRecordedIn</code>, and <code>HTO:hasTextQuality</code>, the ontology supports full lineage tracking from OCR to human-reviewed RDF. This is critical for understanding transformations across stages of digitization, modeling, and enrichment.</p>
+          </li>
+        </ul>
+
+        <h3 id="example-use-in-mapping-change">Example Use in Mapping Change</h3>
+
+        <p>Each gazetteer article is instantiated as an <code>HTO:Article</code>, linked to its originating <code>HTO:Volume</code> and to one or more <code>HTO:Concept</code>s (e.g., “Aberdeen”). Concepts aggregate variations of place descriptions across editions, while RDF-level annotations record when, where, and how each article was extracted or transformed.</p>
+
+        <p>Prompt templates and GPT outputs are represented as <code>HTO:InformationResource</code>s, allowing clear documentation of AI-assisted steps. This structured metadata facilitates reproducibility and comparative studies across digitized corpora.</p>
+
+        <p>HTO is designed to be extensible and aligns with best practices in cultural heritage modeling, combining traditional bibliographic ontologies with novel AI-aware components.</p>
+
+      </div>
+</section>
+
+  <section id="construction-and-content" inlist="" rel="schema:hasPart" resource="#construction-and-content">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Construction and Content</h2>
+
+        <p>The resource was built using a modular pipeline comprising:</p>
+
+        <h3 id="extraction">Extraction</h3>
+
+        <ul>
+          <li>Volume-specific scripts (e.g., <a href="https://github.com/francesNLP/MappingChange/blob/main/src/extract_gaz_1803.py">extract_gaz_1803.py</a>) segment OCR text using GPT-4 with prompts adapted to differing article structures.</li>
+          <li>Prompts handle varying formats, including mid-page entries, redirects, and irregular headers.</li>
+        </ul>
+
+        <h4 id="volume-specific-prompt-engineering">Volume-Specific Prompt Engineering</h4>
+
+        <p>Because each Gazetteer edition between 1803 and 1901 features highly distinct layout conventions (e.g., capitalization, abbreviations, header formatting, article delimiters), we could not apply a single uniform prompt across all volumes. Instead, we designed <strong>custom GPT-4 prompts</strong> for each edition to ensure accurate article segmentation and place name extraction.</p>
+
+        <p>The table below summarizes the key differences and our adaptation strategies:</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Gazetteer Volume</th>
+              <th>Prompt Focus</th>
+              <th>Format Characteristics</th>
+              <th>Prompt Adaptation Strategy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1803</td>
+              <td>Entry detection in irregular formatting</td>
+              <td>Short entries, inconsistent punctuation</td>
+              <td>Prompt includes examples with minimal structure; stresses sentence-level cues for boundaries</td>
+            </tr>
+            <tr>
+              <td>1806</td>
+              <td>Parsing longer headers</td>
+              <td>Descriptive headers like “Parish of…”</td>
+              <td>Prompt highlights multi-word headers and requests exact header extraction</td>
+            </tr>
+            <tr>
+              <td>1825</td>
+              <td>Delimiting fused articles</td>
+              <td>Minimal line breaks between articles</td>
+              <td>Prompt stresses lexical patterns (e.g., place types, initial caps) to find boundaries</td>
+            </tr>
+            <tr>
+              <td>1838</td>
+              <td>Handling abbreviations and symbols</td>
+              <td>Use of brackets, abbreviations for counties</td>
+              <td>Prompt includes example abbreviations and instructions to include them in headers</td>
+            </tr>
+            <tr>
+              <td>1842</td>
+              <td>Identifying hierarchical entries</td>
+              <td>Entries with sub-places or parenthesized detail</td>
+              <td>Prompt uses hierarchical examples and specifies nested JSON structure</td>
+            </tr>
+            <tr>
+              <td>1846</td>
+              <td>Normalizing inconsistent capitalization</td>
+              <td>Random capital words mid-paragraph</td>
+              <td>Prompt emphasizes ignoring internal caps unless followed by specific patterns</td>
+            </tr>
+            <tr>
+              <td>1868</td>
+              <td>Filtering out printed annotations</td>
+              <td>Use of special characters, side notes</td>
+              <td>Prompt includes rule to ignore marginal notes or typesetting artifacts</td>
+            </tr>
+            <tr>
+              <td>1884 &amp; 1901</td>
+              <td>Unified structured prompt</td>
+              <td>Consistent bold headers, clear formatting</td>
+              <td>A single prompt applied to both; relies on standard visual patterns and separators</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>Each prompt is represented as an instance of <code>HTO:InformationResource</code>, enabling traceable documentation of prompt design and LLM usage in our pipeline.</p>
+
+        <h3 id="cleaning--deduplication">Cleaning &amp; Deduplication</h3>
+
+        <ul>
+          <li>Cleaned JSON outputs are merged.</li>
+          <li>Fuzzy matching, prefix-trees, and substring containment detect duplicates across years and within volumes.</li>
+        </ul>
+
+        <h3 id="dataframe-generation">DataFrame Generation</h3>
+
+        <ul>
+          <li>Unified metadata from OCR, XML, and GPT outputs are exported to structured JSON-based DataFrames.</li>
+        </ul>
+
+        <h3 id="knowledge-graph-generation">Knowledge Graph Generation</h3>
+
+        <ul>
+          <li>RDF triples are created using the improved HTO ontology.</li>
+          <li>Entities include Articles, Volumes, Concepts, and digitization provenance.</li>
+        </ul>
+
+        <h3 id="entity-linking">Entity Linking</h3>
+
+        <ul>
+          <li>Gazetteer terms are matched to DBpedia and Wikidata using label and description matching.</li>
+          <li>Articles with similar embeddings are grouped into concepts using <code>all-mpnet-base-v2</code>.</li>
+        </ul>
+
+        <h3 id="enrichment">Enrichment</h3>
+
+        <ul>
+          <li>Concepts are assigned summaries, sentiment values, and external links.</li>
+          <li>Article timelines visualize the evolution of place concepts across editions.</li>
+        </ul>
+
+        <h3 id="search-indices">Search Indices</h3>
+
+        <ul>
+          <li>Elasticsearch indices are built for articles, Wikidata, and DBpedia entities.</li>
+          <li>Vector search enables semantically similar article discovery.</li>
+        </ul>
+
+        <h3 id="geoparsing">Geoparsing</h3>
+
+        <ul>
+          <li>For enriched geospatial analysis, <code>geoparse.py</code> tags locations using SpaCy NER and Gazetteer context.</li>
+        </ul>
+
+        <p>All scripts are in <a href="https://github.com/francesNLP/MappingChange/tree/main/src">MappingChange/src/</a>, and their outputs are versioned and archived.</p>
+
+      </div>
+</section>
+
+  <section id="usage" inlist="" rel="schema:hasPart" resource="#usage">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Usage</h2>
+
+        <p>Mapping Change can be explored in three main ways:</p>
+
+        <h3 id="data-access">Data Access</h3>
+        <ul>
+          <li>All cleaned DataFrames and RDF graphs are in the GitHub repository: <a href="https://github.com/francesNLP/MappingChange">francesNLP/MappingChange</a></li>
+          <li>Scripts for reproducing those dataframes, KGs and ES are in the GitHub repository: <a href="https://github.com/francesNLP/MappingChange">francesNLP/MappingChange</a></li>
+          <li><a href="https://zenodo.org">Zenodo DOI</a> (to be added)</li>
+        </ul>
+
+        <h3 id="sparql-querying">SPARQL Querying</h3>
+        <ul>
+          <li>A Fuseki SPARQL server supports knowledge graph exploration.</li>
+          <li>Sample queries for retrieving places, concepts, and links are included.</li>
+        </ul>
+
+        <h3 id="frances-platform">Frances Platform</h3>
+        <ul>
+          <li>Users can search and explore articles via full-text or semantic search.</li>
+          <li>Concepts are visualized through timelines and embeddings.</li>
+        </ul>
+
+        <h3 id="notebooks">Notebooks</h3>
+        <p>Google Colab notebooks are provided for each gazetteer to enable direct exploration and analysis.</p>
+
+      </div>
+</section>
+
+  <section id="sustainability" inlist="" rel="schema:hasPart" resource="#sustainability">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Sustainability</h2>
+
+        <p>Mapping Change is designed to support long-term historical research:</p>
+
+        <ul>
+          <li><strong>Archiving</strong>: All code, data, and RDF outputs are versioned and archived on Zenodo.</li>
+          <li><strong>Ontological Reuse</strong>: The HTO ontology is maintained and extended in an open repository with permanent identifiers.</li>
+          <li><strong>Frances Platform Integration</strong>: The data is accessible through a production-ready semantic platform, ensuring ongoing usability beyond the scope of the project.</li>
+          <li><strong>Extensibility</strong>: The pipeline is modular and supports the integration of new volumes, editions, or other regional gazetteers.</li>
+        </ul>
+
+      </div>
+</section>
+
+  <section id="conclusion" inlist="" rel="schema:hasPart" resource="#conclusion">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Conclusion</h2>
+
+        <p><em>Mapping Change</em> creates a temporal, semantic infrastructure for exploring Scottish place descriptions from 1803–1901. Combining LLM-based extraction, improved ontology design, and semantic search, we deliver a reusable, interoperable dataset for historical research.</p>
+
+        <p>The improved HTO ontology enables robust modeling of textual provenance, record quality, and evolving concepts. The Frances platform empowers researchers to query and visualize this data across time and space.</p>
+
+        <p>Future work includes integrating cartographic metadata, and link it to the 100 years of the Encyclopaedia Britannica.</p>
+
+      </div>
+</section>
+
+  <section id="acknowledgements" inlist="" rel="schema:hasPart" resource="#acknowledgements">
+<div datatype="rdf:HTML" property="schema:description">
+        <h2 property="schema:name">Acknowledgements</h2>
+
+        <p>This work was supported by the Royal Society of Edinburgh (RSE Small Research Grant).</p>
+
+      </div>
+</section>
+
+  <section>
+<div datatype="rdf:HTML" property="schema:description">
+        <p>@article{semanticweb,
+  title = {The semantic web},
+  author = {Berners-Lee, Tim and Hendler, James and Lassila, Ora and others},
+  journal = {Scientific American},
+  volume = {284},
+  number = {5},
+  pages = {28–37},
+  year = {2001},
+  publisher = {New York, NY, USA:}
+}</p>
+
+      </div>
+</section>
+
+</main>
+
+
+<footer></footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+@page {
+  size: A4;
+  margin: 2.5cm 2.5cm 2.5cm 2.5cm;
+}
+
+html, body {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #000;
+  background: none;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-weight: bold;
+  color: #000;
+  page-break-after: avoid;
+}
+
+h1 {
+  font-size: 16pt;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+
+h2 {
+  font-size: 13pt;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+
+h3 {
+  font-size: 12pt;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin: 0 0 1em 0;
+  text-align: justify;
+}
+
+ul, ol {
+  margin-left: 2em;
+  margin-bottom: 1em;
+}
+
+code {
+  font-family: monospace;
+  background-color: #f4f4f4;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+pre {
+  font-family: monospace;
+  background-color: #f4f4f4;
+  padding: 1em;
+  overflow-x: auto;
+  border: 1px solid #ccc;
+}
+
+header {
+  margin-bottom: 2em;
+  border-bottom: 1px solid #aaa;
+  padding-bottom: 0.5em;
+}
+
+header h1 {
+  font-size: 16pt;
+  margin-bottom: 0.2em;
+}
+
+header p {
+  font-size: 10pt;
+  color: #444;
+  margin: 0;
+}
+
+footer {
+  display: none;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+#content {
+  width: 100%;
+}
+
+.printfont1,
+.printfont2,
+.printfont3,
+.printfont4 {
+  display: none;
+}
+
+
+main {
+  counter-reset: section;
+}
+
+/* Section counter for h2 */
+main section h2::before {
+  counter-increment: section;
+  counter-reset: subsection;
+  content: counter(section) ". ";
+  font-weight: bold;
+}
+
+/* Subsection counter for h3 */
+main h3::before {
+  counter-increment: subsection;
+  content: counter(section) "." counter(subsection) " ";
+  font-weight: bold;
+}
