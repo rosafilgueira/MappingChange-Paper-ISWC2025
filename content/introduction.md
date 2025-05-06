@@ -19,7 +19,7 @@ The complexity and variability of these sources can be seen in Figure 1, which p
   <div style="flex: 1; text-align: center;">
     <img src="images/1884-gazetteer-page.jpg" alt="First page of the 1884 Ordnance Gazetteer of Scotland" style="max-width: 200px; height: auto; border: 1px solid #ccc;">
     <p style="font-size: 0.9em;">
-      <strong>Figure 1 (right):</strong> Opening entries of the 1884 <em>Ordnance Gazetteer of Scotland</em>. This edition presents clearer structure, with entries formatted in title case and followed by commas. Page headers consit of the first and last name page's places, both in uppercase. Furthermore, it introduces long articles with historical digressions and cross-references necessitating more refined prompting strategies for accurate segmentation.
+      <strong>Figure 1 (right):</strong> Opening entries of the 1884 <em>Ordnance Gazetteer of Scotland</em>. This edition presents clearer structure, with entries formatted in title case and followed by commas. Page headers consit of the first and last name page's places, both in uppercase. Furthermore, it introduces long articles with historical digressions and cross-references necessitating more refined prompting strategies for segmentation.
     </p>
   </div>
 </div>
