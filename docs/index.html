@@ -10,7 +10,7 @@
   <meta name="citation_title" content="Mapping Change: A Temporal and Semantic Knowledge Base of Scottish Gazetteers (1803–1901)">
   
   
-  <meta name="citation_publication_date" content="2025/05/06" />
+  <meta name="citation_publication_date" content="2025/05/07" />
 </head>
 
 <body prefix="dctypes: http://purl.org/dc/dcmitype/ pimspace: http://www.w3.org/ns/pim/space# rsa: http://www.w3.org/ns/auth/rsa# cert: http://www.w3.org/ns/auth/cert# wgs: http://www.w3.org/2003/01/geo/wgs84_pos# biblio: http://purl.org/net/biblio# bibo: http://purl.org/ontology/bibo/ book: http://purl.org/NET/book/vocab# ov: http://open.vocab.org/terms/ doap: http://usefulinc.com/ns/doap# dbr: http://dbpedia.org/resource/ dbp: http://dbpedia.org/property/ sio: http://semanticscience.org/resource/ opmw: http://www.opmw.org/ontology/ deo: http://purl.org/spar/deo/ doco: http://purl.org/spar/doco/ cito: http://purl.org/spar/cito/ fabio: http://purl.org/spar/fabio/ solid: http://www.w3.org/ns/solid/terms# acl: http://www.w3.org/ns/auth/acl# dio: https://w3id.org/dio# lsc: http://linkedscience.org/lsc/ns#" typeof="schema:CreativeWork sioc:Post prov:Entity lsc:Research">
@@ -84,11 +84,19 @@
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Related Work</h2>
 
-        <p>Efforts to structure historical textual data have increasingly turned to Semantic Web technologies. Projects like Linked Places, WarSampo, and Enslaved.org demonstrate how knowledge graphs can model entities, events, and relationships from historical sources. Similarly, national libraries have applied OCR and metadata modeling to digitize collections, such as the NLS’s Data Foundry.</p>
+        <p>A growing body of research in digital humanities and cultural heritage has increasingly adopted Semantic Web technologies to structure, enrich, and interlink historical textual corpora. Notable examples include <em>WarSampo</em> [@WarSampo], which models World War II data from Finland as Linked Open Data, and <em>Enslaved.org</em> [@enslaved; @enslavedontology], which applies graph-based modeling to records from the transatlantic slave trade. These projects demonstrate how knowledge graphs can be used to represent complex relationships among people, places, and events in heterogeneous historical sources.</p>
 
-        <p>Our work builds on this tradition while addressing unique challenges presented by 19th-century gazetteers: noisy OCR, lack of structural markup, and inconsistent editorial conventions. Prior methods using rule-based extraction or statistical models fall short when applied to these irregular texts. Recent advances using large language models (LLMs) like GPT-4 show promise in segmenting, interpreting, and linking historical content. We apply such models at scale, with edition-specific prompting strategies and custom cleaning heuristics, to generate reliable article-level entries and semantic annotations.</p>
+        <p>At the national level, initiatives such as the Europeana Data Model (EDM) [@EDM] and the National Library of Scotland’s <a href="https://data.nls.uk/data/digitised-collections/">Data Foundry</a> exemplify large-scale digitization and metadata modeling efforts aimed at improving accessibility and reuse of cultural heritage data. Europeana promotes interoperability through linked data principles and vocabulary standardization, while the NLS provides high-quality scans and ALTO XML for thousands of 19th-century documents, including <a href="https://data.nls.uk/data/digitised-collections/gazetteers-of-scotland/">the Gazetteers of Scotland</a>.</p>
 
-        <p>Our ontology-driven approach aligns with recent efforts like the EB Ontology, NLS Ontology, and the Enslaved Ontology, but introduces the more flexible and extensible Heritage Textual Ontology (HTO), designed specifically for long-range temporal comparison and provenance tracking across multiple editions and digitization methods.</p>
+        <p>Nevertheless, these infrastructures alone are insufficient for corpora like Scottish gazetteers, which present significant challenges: noisy OCR, lack of article-level segmentation, mid-page article starts, and inconsistent editorial conventions across editions. Traditional approaches to structuring such texts—including rule-based or statistical methods—often fail under these conditions. Prior work on historical textual collections, such as newspapers or the Encyclopaedia Britannica (e.g., using the <code>defoe</code> toolkit [@defoe; @extending-defoe]) has demonstrated the need for scalable, domain-adapted pipelines.</p>
+
+        <p>Recent breakthroughs in large language models (LLMs) such as GPT-4 [@gpt4_technical_report] open new possibilities for flexible text interpretation and segmentation. Our project leverages these models at scale with custom prompts tailored to the editorial style of each edition. This enables us to segment and extract over 50,000 structured article-level entries from ten 19th-century gazetteer volumes, while handling abbreviation styles, redirects, and evolving toponym usage.</p>
+
+        <p>Beyond extraction, semantic modeling is critical to ensuring data reusability and interpretability. We build on and extend prior ontologies developed for cultural heritage contexts—such as the <em>Encyclopaedia Britannica Ontology</em> [@ebontology] and the <em>National Library of Scotland Ontology</em> [@nlsontology]—to model bibliographic provenance and source structure. However, these earlier ontologies were not designed to represent the full diachronic and computational transformation history of digitized corpora.</p>
+
+        <p>To address this gap, we introduced in our previous work [@frances] the <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a> [@hto], which provides a provenance-aware semantic framework that models not only the source structure and bibliographic metadata, but also digitization context, prompt templates, LLM-based outputs, and semantic enrichments. HTO integrates concepts from PROV-O [@groth2013prov] and <a href="https://schema.org">Schema.org</a>, but extends them with domain-specific classes and properties tailored to heritage corpora and AI-assisted transformations.</p>
+
+        <p>Finally, our work is fully integrated into the Frances semantic platform, which supports temporal exploration and semantic search of historical data. Recent updates to Frances—described in our 2024 eScience paper [@frances]—include improved support for concept clustering, knowledge graph visualization, and extensible RDF modeling, making MappingChange a robust and reusable infrastructure for temporal knowledge base construction in historical research.</p>
 
       </div>
 </section>
@@ -361,15 +369,113 @@
 
   <section>
 <div datatype="rdf:HTML" property="schema:description">
-        <p>@article{semanticweb,
-  title = {The semantic web},
-  author = {Berners-Lee, Tim and Hendler, James and Lassila, Ora and others},
-  journal = {Scientific American},
-  volume = {284},
-  number = {5},
-  pages = {28–37},
-  year = {2001},
-  publisher = {New York, NY, USA:}
+        <p>@misc{enslaved,
+  title = {Enslaved.org},
+  note = {\url{https://enslaved.org}},
+  year = {2020}
+}</p>
+
+        <p>@misc{nlsontology,
+  author = {Rosa Filgueira},
+  title = {National Library of Scotland Ontology},
+  note         = {\url{https://w3id.org/nls}},
+  howpublished = {\url{https://github.com/francesNLP/NLS-ontology}},
+  year = {2023}
+}</p>
+
+        <p>@misc{ebontology,
+  author = {Rosa Filgueira},
+  title = {Encyclopaedia Britannica Ontology},
+  note         = {\url{https://w3id.org/eb}},
+  howpublished = {\url{https://github.com/francesNLP/EB-ontology}},
+  year = {2023}
+}</p>
+
+        <p>@misc{enslavedontology,
+  title = {Enslaved Ontology},
+  note = {\url{https://docs.enslaved.org/ontology/}},
+  year = {2023}
+}</p>
+
+        <p>@misc{hto,
+  author       = {Yu, Lilin and Filgueira, Rosa},
+  title        = {The Heritage Textual Ontology (HTO)},
+  year         = {2024},
+  note         = {\url{https://w3id.org/hto}},
+  howpublished = {\url{https://github.com/frances-ai/HeritageTextOntology}}
+}</p>
+
+        <p>@inproceedings{frances,
+  author       = {Lilin Yu and
+                  Ash Charlton and
+                  Melissa Terras and
+                  Rosa Filgueira},
+  title        = {Advancing frances: New Heritage Textual Ontology, Enhanced Knowledge
+                  Graphs, and Refined Search Capabilities},
+  booktitle    = {20th {IEEE} International Conference on e-Science, e-Science 2024,
+                  Osaka, Japan, September 16-20, 2024},
+  pages        = {1–10},
+  publisher    = {{IEEE}},
+  year         = {2024},
+  url          = {https://doi.org/10.1109/e-Science62913.2024.10678663},
+  doi          = {10.1109/E-SCIENCE62913.2024.10678663},
+  timestamp    = {Mon, 03 Mar 2025 21:02:29 +0100},
+  biburl       = {https://dblp.org/rec/conf/eScience/YuCTF24.bib},
+  bibsource    = {dblp computer science bibliography, https://dblp.org}
+}</p>
+
+        <p>@article{WarSampo,
+author = {Eero Hyvönen},
+title ={Digital humanities on the Semantic Web: Sampo model and portal series},
+journal = {Semantic Web},
+volume = {14},
+number = {4},
+pages = {729-744},
+year = {2023},
+doi = {10.3233/SW-223034},
+URL = { 
+        https://journals.sagepub.com/doi/abs/10.3233/SW-223034
+},
+eprint = { 
+        https://journals.sagepub.com/doi/pdf/10.3233/SW-223034
+}
+}</p>
+
+        <p>@article{EDM,
+  author = {Ana Luísa Silva and Ana Lúcia Terra},
+  title ={Cultural heritage on the Semantic Web: The Europeana Data Model},
+  journal = {IFLA Journal},
+  volume = {0},
+  number = {0},
+  pages = {03400352231202506},
+  year = {0},
+  doi = {10.1177/03400352231202506},
+  url = {https://doi.org/10.1177/03400352231202506},
+  eprint = {https://doi.org/10.1177/03400352231202506}
+}</p>
+
+        <p>@article{hawkins2022archives,
+  title={Archives, linked data and the digital humanities: increasing access to digitised and born-digital archives via the semantic web},
+  author={Hawkins, Ashleigh},
+  journal={Archival Science},
+  volume={22},
+  number={3},
+  pages={319–344},
+  year={2022},
+  publisher={Springer}
+}</p>
+
+        <p>@inproceedings{extending-defoe,
+  title = {Extending defoe for the efficient analysis of historical texts at scale},
+  author = {Rosa Filgueira and Claire Grover and others},
+  booktitle = {2021 IEEE 17th International Conference on eScience (eScience)},
+  year = {2021},
+  month = oct,
+  day = {26},
+  doi = {10.1109/eScience51609.2021.00012},
+  language = {English},
+  isbn = {9781665447089},
+  pages = {21–29}
 }</p>
 
       </div>
