@@ -84,19 +84,19 @@
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Related Work</h2>
 
-        <p>A growing body of research in digital humanities and cultural heritage has increasingly adopted Semantic Web technologies to structure, enrich, and interlink historical textual corpora. Notable examples include <em>WarSampo</em> [@WarSampo], which models World War II data from Finland as Linked Open Data, and <em>Enslaved.org</em> [@enslaved; @enslavedontology], which applies graph-based modeling to records from the transatlantic slave trade. These projects demonstrate how knowledge graphs can be used to represent complex relationships among people, places, and events in heterogeneous historical sources.</p>
+        <p>A growing body of research in digital humanities and cultural heritage has increasingly adopted Semantic Web technologies to structure, enrich, and interlink historical textual corpora. Notable examples include <em>WarSampo</em> @WarSampo, which models World War II data from Finland as Linked Open Data, and <em>Enslaved.org</em> @enslaved, @enslavedontology, which applies graph-based modeling to records from the transatlantic slave trade. These projects demonstrate how knowledge graphs can be used to represent complex relationships among people, places, and events in heterogeneous historical sources.</p>
 
-        <p>At the national level, initiatives such as the Europeana Data Model (EDM) [@EDM] and the National Library of Scotland’s <a href="https://data.nls.uk/data/digitised-collections/">Data Foundry</a> exemplify large-scale digitization and metadata modeling efforts aimed at improving accessibility and reuse of cultural heritage data. Europeana promotes interoperability through linked data principles and vocabulary standardization, while the NLS provides high-quality scans and ALTO XML for thousands of 19th-century documents, including <a href="https://data.nls.uk/data/digitised-collections/gazetteers-of-scotland/">the Gazetteers of Scotland</a>.</p>
+        <p>At the national level, initiatives such as the Europeana Data Model (EDM) @EDM and the National Library of Scotland’s <a href="https://data.nls.uk/data/digitised-collections/">Data Foundry</a> exemplify large-scale digitization and metadata modeling efforts aimed at improving accessibility and reuse of cultural heritage data. Europeana promotes interoperability through linked data principles and vocabulary standardization, while the NLS provides high-quality scans and ALTO XML for thousands of 19th-century documents, including <a href="https://data.nls.uk/data/digitised-collections/gazetteers-of-scotland/">the Gazetteers of Scotland</a>.</p>
 
-        <p>Nevertheless, these infrastructures alone are insufficient for corpora like Scottish gazetteers, which present significant challenges: noisy OCR, lack of article-level segmentation, mid-page article starts, and inconsistent editorial conventions across editions. Traditional approaches to structuring such texts—including rule-based or statistical methods—often fail under these conditions. Prior work on historical textual collections, such as newspapers or the Encyclopaedia Britannica (e.g., using the <code>defoe</code> toolkit [@defoe; @extending-defoe]) has demonstrated the need for scalable, domain-adapted pipelines.</p>
+        <p>Nevertheless, these infrastructures alone are insufficient for corpora like Scottish gazetteers, which present significant challenges: noisy OCR, lack of article-level segmentation, mid-page article starts, and inconsistent editorial conventions across editions. Traditional approaches to structuring such texts—including rule-based or statistical methods—often fail under these conditions. Prior work on historical textual collections, such as newspapers or the Encyclopaedia Britannica (e.g., using the <code>defoe</code> toolkit @defoe, @extending-defoe) has demonstrated the need for scalable, domain-adapted pipelines.</p>
 
-        <p>Recent breakthroughs in large language models (LLMs) such as GPT-4 [@gpt4_technical_report] open new possibilities for flexible text interpretation and segmentation. Our project leverages these models at scale with custom prompts tailored to the editorial style of each edition. This enables us to segment and extract over 50,000 structured article-level entries from ten 19th-century gazetteer volumes, while handling abbreviation styles, redirects, and evolving toponym usage.</p>
+        <p>Recent breakthroughs in large language models (LLMs) such as GPT-4 @gpt4_technical_report open new possibilities for flexible text interpretation and segmentation. Our project leverages these models at scale with custom prompts tailored to the editorial style of each edition. This enables us to segment and extract over 50,000 structured article-level entries from ten 19th-century gazetteer volumes, while handling abbreviation styles, redirects, and evolving toponym usage.</p>
 
-        <p>Beyond extraction, semantic modeling is critical to ensuring data reusability and interpretability. We build on and extend prior ontologies developed for cultural heritage contexts—such as the <em>Encyclopaedia Britannica Ontology</em> [@ebontology] and the <em>National Library of Scotland Ontology</em> [@nlsontology]—to model bibliographic provenance and source structure. However, these earlier ontologies were not designed to represent the full diachronic and computational transformation history of digitized corpora.</p>
+        <p>Beyond extraction, semantic modeling is critical to ensuring data reusability and interpretability. We build on and extend prior ontologies developed for cultural heritage contexts—such as the <em>Encyclopaedia Britannica Ontology</em> @ebontology and the <em>National Library of Scotland Ontology</em> @nlsontology,to model bibliographic provenance and source structure. However, these earlier ontologies were not designed to represent the full diachronic and computational transformation history of digitized corpora.</p>
 
-        <p>To address this gap, we introduced in our previous work [@frances] the <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a> [@hto], which provides a provenance-aware semantic framework that models not only the source structure and bibliographic metadata, but also digitization context, prompt templates, LLM-based outputs, and semantic enrichments. HTO integrates concepts from PROV-O [@groth2013prov] and <a href="https://schema.org">Schema.org</a>, but extends them with domain-specific classes and properties tailored to heritage corpora and AI-assisted transformations.</p>
+        <p>To address this gap, we introduced in our previous work @frances the <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a> @hto, which provides a provenance-aware semantic framework that models not only the source structure and bibliographic metadata, but also digitization context, prompt templates, LLM-based outputs, and semantic enrichments. HTO integrates concepts from PROV-O @groth2013prov and <a href="https://schema.org">Schema.org</a>, but extends them with domain-specific classes and properties tailored to heritage corpora and AI-assisted transformations.</p>
 
-        <p>Finally, our work is fully integrated into the Frances semantic platform, which supports temporal exploration and semantic search of historical data. Recent updates to Frances—described in our 2024 eScience paper [@frances]—include improved support for concept clustering, knowledge graph visualization, and extensible RDF modeling, making MappingChange a robust and reusable infrastructure for temporal knowledge base construction in historical research.</p>
+        <p>Finally, our work is fully integrated into the Frances semantic platform, which supports temporal exploration and semantic search of historical data. Recent updates to Frances @frances, include improved support for concept clustering, knowledge graph visualization, and extensible RDF modeling, making MappingChange a robust and reusable infrastructure for temporal knowledge base construction in historical research.</p>
 
       </div>
 </section>
@@ -476,6 +476,22 @@ eprint = {
   language = {English},
   isbn = {9781665447089},
   pages = {21–29}
+}</p>
+
+        <p>@article{groth2013prov,
+  title={PROV-overview},
+  author={Groth, Paul and others},
+  journal={W3C Working Group Note},
+  year={2013}
+}</p>
+
+        <p>@misc{gpt4_technical_report,
+  title = {GPT-4 Technical Report},
+  author = {OpenAI},
+  year = {2023},
+  url = {https://arxiv.org/abs/2303.08774},
+  doi = {10.48550/arXiv.2303.08774},
+  note = {arXiv:2303.08774 [cs.CL]}
 }</p>
 
       </div>
