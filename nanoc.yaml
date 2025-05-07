@@ -1,6 +1,11 @@
 string_pattern_type: glob
 
-text_extensions: [ 'adoc', 'asciidoc', 'atom', 'bib', 'coffee', 'css', 'erb', 'haml', 'handlebars', 'hb', 'htm', 'html', 'js', 'json', 'jsonld', 'less', 'markdown', 'md', 'ms', 'mustache', 'php', 'rb', 'rdoc', 'sass', 'scss', 'slim', 'ttl', 'txt', 'xhtml', 'xml', 'csv' ]
+text_extensions: [
+  'adoc', 'asciidoc', 'atom', 'bib', 'coffee', 'css', 'erb', 'haml',
+  'handlebars', 'hb', 'htm', 'html', 'js', 'json', 'jsonld', 'less',
+  'markdown', 'md', 'ms', 'mustache', 'php', 'rb', 'rdoc', 'sass',
+  'scss', 'slim', 'ttl', 'txt', 'xhtml', 'xml', 'csv'
+]
 
 output_dir: output
 
@@ -13,8 +18,7 @@ prune:
   exclude: [ '.git', '.hg', '.svn', 'CVS' ]
 
 data_sources:
-  -
-    type: filesystem
+  - type: filesystem
     items_root: /
     layouts_root: /
     encoding: utf-8
@@ -26,3 +30,9 @@ checks:
   external_links:
     exclude: []
     exclude_files: []
+
+scholar:
+  style: lncs
+  bibliography: references.bib
+  csl: styles/lncs-custom.csl
+
