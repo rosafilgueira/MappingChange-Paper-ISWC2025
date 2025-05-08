@@ -117,40 +117,47 @@
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Heritage Textual Ontology</h2>
 
-        <p>The <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a> provides the semantic backbone for <em>Mapping Change</em>, enabling structured representation of historical textual records, their provenance, and evolving place-based concepts. Since its initial release, HTO has undergone substantial refinement to support richer semantic modeling, improved interoperability, and enhanced tracking of digitization workflows and AI-assisted outputs. It is designed to model not just entities and attributes but also the editorial and computational processes by which each record is extracted, cleaned, and enriched. Unlike generic ontologies, HTO supports the representation of textual provenance, extraction prompts, editorial hierarchies, and diachronic linkage across editions. It enables us to track how descriptions of the same place evolve over time, with full transparency into their source structure and transformation process. Its design has been guided by real-world use cases in digital heritage, and it plays a central role in making the resulting knowledge graphs both expressive and reproducible.</p>
+        <p>The <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a> provides the semantic backbone for <em>MappingChange</em>, enabling the structured representation of historical textual records, their provenance, and the evolving concepts they describe. Developed to support real-world use cases in digital heritage, HTO models not only entities and attributes, but also the editorial and computational processes by which historical texts are extracted, digitized, interpreted, and semantically enriched. Unlike more generic vocabularies, HTO is tailored to the challenges of heritage corpora—such as OCR noise, editorial variation, and evolving terminology—offering fine-grained support for provenance, textual quality, named entity recognition, and diachronic conceptual alignment.</p>
 
-        <p>The ontology is openly developed at <a href="https://github.com/frances-ai/HeritageTextOntology">github.com/frances-ai/HeritageTextOntology</a>, and its documentation, including diagrams and examples, is available at <a href="https://w3id.org/hto">w3id.org/hto</a>.</p>
+        <p>HTO is openly developed at <a href="https://github.com/frances-ai/HeritageTextOntology">github.com/frances-ai/HeritageTextOntology</a>, with diagrams and documentation published at <a href="https://w3id.org/hto">https:/​/​w3id.org/hto</a>. It builds on established ontologies such as <a href="https://www.w3.org/TR/prov-o/">PROV-O</a>, <a href="https://www.w3.org/TR/skos-reference/">SKOS</a>, <a href="https://schema.org">Schema.org</a>, and <a href="https://www.cidoc-crm.org">CIDOC CRM</a>, while introducing domain-specific classes and properties designed for flexible reuse and extension. Since its initial release, HTO has been extended to support geospatial annotation, richer NER-based enrichment, and explicit modeling of language-model-based transformations, making it suitable for a wider range of digitized corpora.</p>
 
-        <h3 id="key-ontological-enhancements">Key Ontological Enhancements</h3>
+        <p>HTO is modular and extensible, and can be adopted in other projects that require modeling of OCR-derived documents, provenance-aware digitization pipelines, or diachronic semantic alignment. It also plays a central role in enabling FAIR knowledge graph construction—ensuring that all data is Findable, Accessible, Interoperable, and Reusable, with transparent lineage tracking.</p>
 
-        <ul>
-          <li>
-            <p><strong>Textual Record Modeling</strong>: New classes such as <code>HTO:Article</code>, <code>HTO:PlaceRecord</code>, <code>HTO:InternalRecord</code>, and <code>HTO:TermRecord</code> differentiate between OCR-extracted fragments, cleaned entries, and semantically disambiguated concepts. The <code>HTO:Description</code> class tracks structured outputs from GPT-4, manual annotations, or post-processing tools.</p>
-          </li>
-          <li>
-            <p><strong>Digitization Provenance</strong>: Bibliographic metadata is modeled using <code>HTO:Work</code>, <code>HTO:Volume</code>, and <code>HTO:Edition</code>, with provenance relationships defined via <a href="https://www.w3.org/TR/prov-o/">PROV-O</a> and <a href="https://schema.org">schema.org</a>. Each <code>HTO:Article</code> is linked to its digitized source via permanent NLS page URLs and includes annotations such as <code>HTO:textQuality</code> to assess OCR accuracy and reliability.</p>
-          </li>
-          <li>
-            <p><strong>Concept Evolution and Semantic Clustering</strong>: <code>HTO:Concept</code> is used in combination with <a href="https://www.w3.org/TR/skos-reference/">SKOS</a> to group equivalent or evolving place references across multiple gazetteer editions. Concepts can represent locations, institutions, or geographical types and are dynamically inferred from embeddings and term clustering.</p>
-          </li>
-          <li>
-            <p><strong>Geographic and Type Annotation</strong>: The ontology introduces <code>HTO:GeographicAnnotation</code> for storing lat/lon coordinates derived from external services or contextual inference. It also includes <code>HTO:LocationType</code> for classifying place categories (e.g., parish, river, estate).</p>
-          </li>
-          <li>
-            <p><strong>Linking and External Alignment</strong>: Instances of <code>HTO:PlaceRecord</code> and <code>HTO:Concept</code> may include links to external resources using <code>HTO:externalMatch</code>, allowing interconnection with <a href="https://www.wikidata.org">Wikidata</a>, <a href="https://www.dbpedia.org">DBpedia</a>, and other knowledge bases.</p>
-          </li>
-          <li>
-            <p><strong>Lineage and Versioning Support</strong>: Using <code>HTO:wasDerivedFrom</code>, <code>HTO:wasRecordedIn</code>, and <code>HTO:hasTextQuality</code>, the ontology supports full lineage tracking from OCR to human-reviewed RDF. This is critical for understanding transformations across stages of digitization, modeling, and enrichment.</p>
-          </li>
-        </ul>
+        <h3 id="modeling-bibliographic-structure-and-provenance">Modeling Bibliographic Structure and Provenance</h3>
 
-        <h3 id="example-use-in-mapping-change">Example Use in Mapping Change</h3>
+        <p>HTO provides a structured vocabulary for modeling the archival hierarchy of heritage texts—including works, editions, series, and pages—through the class <code>hto:Work</code> and its subclasses. Each textual entity is also a <code>prov:Entity</code> (<code>hto:EntityWithProvenance</code>), enabling provenance tracking for digitization methods (e.g., OCR or manual transcription), quality levels (<code>hto:TextQuality</code>), and attribution to specific software or human agents (<code>prov:Agent</code>). Works can be grouped into collections using <code>hto:Collection</code> and linked to their physical or digital source editions. Figure <a href="#fig-hto-bib">2</a> illustrates this bibliographic modeling layer.</p>
+        <p align="center">
+  <img src="images/HTO_textual_content.png" alt="HTO bibliographic modeling" width="400px" />
+</p>
+        <p align="center" id="fig-hto-bib"><strong>Figure 2:</strong> Overview of bibliographic and provenance modeling in HTO, including core classes (blue), agents (orange), locations (green), and datatype properties (grey).</p>
 
-        <p>Each gazetteer article is instantiated as an <code>HTO:Article</code>, linked to its originating <code>HTO:Volume</code> and to one or more <code>HTO:Concept</code>s (e.g., “Aberdeen”). Concepts aggregate variations of place descriptions across editions, while RDF-level annotations record when, where, and how each article was extracted or transformed.</p>
+        <h3 id="capturing-textual-records-and-interpretations">Capturing Textual Records and Interpretations</h3>
 
-        <p>Prompt templates and GPT outputs are represented as <code>HTO:InformationResource</code>s, allowing clear documentation of AI-assisted steps. This structured metadata facilitates reproducibility and comparative studies across digitized corpora.</p>
+        <p>HTO distinguishes between original descriptions (<code>hto:OriginalDescription</code>) and derived or enriched interpretations (<code>hto:Description</code>). These are associated with their source pages via <code>hto:Page</code> and <code>hto:hasOriginalDescription</code>, and annotated with quality levels (e.g., “Low”, “Moderate”, or “High”) based on their provenance. This allows the knowledge base to retain multiple text variants and trace how they were extracted and transformed.</p>
 
-        <p>HTO is designed to be extensible and aligns with best practices in cultural heritage modeling, combining traditional bibliographic ontologies with novel AI-aware components.</p>
+        <p>Records within the text are modeled using <code>hto:InternalRecord</code> (for local entities) and <code>hto:ExternalRecord</code> (for linked data resources such as Wikidata or DBpedia). Repeated terms (like “St Andrews”) are tracked across editions via <code>hto:TermRecord</code>, while <code>hto:ConceptRecord</code> groups semantically similar entries into shared <code>hto:Concept</code>s, enabling diachronic alignment. Figure <a href="#fig-hto-terms">3</a> shows how textual terms and their semantic clusters are represented.</p>
+        <p align="center">
+  <img src="images/Annotation.png" alt="HTO term modeling" width="400px" />
+</p>
+        <p align="center" id="fig-hto-terms"><strong>Figure 3:</strong> Modeling of term records and concept clusters using HTO classes for internal and external alignment.</p>
+
+        <h3 id="geospatial-annotations-and-place-modeling">Geospatial Annotations and Place Modeling</h3>
+
+        <p>In <em>MappingChange</em>, HTO has been extended to support spatial annotation and georesolution. Locations are represented as <code>hto:Location</code> and typed using subclasses such as <code>hto:Town</code>, <code>hto:Region</code>, or <code>hto:River</code>. Each place may include spatial geometries using <code>geo:hasGeometry</code> or <code>geo:asGeoJSON</code>, with optional declarations using <code>cidoc-crm:SP2_Declarative_Place</code>. This enables spatial reasoning, integration with GeoSPARQL, and alignment with modern gazetteers and linked data services. See Figure <a href="#fig-hto-geo">4</a> for an overview of spatial modeling in HTO.</p>
+
+        <p align="center">
+  <img src="images/Geospatial.png" alt="HTO geospatial modeling" width="400px" />
+</p>
+        <p align="center" id="fig-hto-geo"><strong>Figure 4:</strong> Representation of locations and spatial types in HTO, including georesolved coordinates and place categorization.</p>
+
+        <h3 id="annotation-and-segment-selection">Annotation and Segment Selection</h3>
+
+        <p>To link extracted place names or descriptions to their textual anchors, HTO adopts <a href="https://www.w3.org/TR/annotation-model/">Web Annotation (OA)</a> standards. Each annotation (<code>oa:Annotation</code>) includes a source document, a target entity, and selectors (e.g., <code>oa:TextQuoteSelector</code>, <code>oa:TextPositionSelector</code>) that specify the exact span of text involved. This ensures fine-grained traceability back to OCR-aligned sources and supports downstream validation and curation. An example is shown in Figure <a href="#fig-hto-annotation">5</a>.</p>
+
+        <p align="center">
+  <img src="images/Annotation_example.png" alt="HTO annotation example" width="400px" />
+</p>
+        <p align="center" id="fig-hto-annotation"><strong>Figure 5:</strong> Example of how text segments are annotated and anchored using OA selectors in HTO.</p>
 
       </div>
 </section>
