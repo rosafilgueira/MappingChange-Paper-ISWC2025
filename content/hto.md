@@ -13,7 +13,7 @@ HTO provides a structured vocabulary for modeling the archival hierarchy of heri
 <p align="center">
   <img src="images/HTO_textual_content.png" alt="HTO bibliographic modeling" width="400px" />
 </p>
-<p align="center" id="fig-hto-bib"><strong>Figure 2:</strong> Overview of bibliographic and provenance modeling in HTO, including core classes (blue), agents (orange), locations (green), and datatype properties (grey).</p>
+<p align="center" id="fig-hto-bib"><strong>Figure 2:</strong> Bibliographic and provenance modeling in HTO, including core classes (blue), agents (orange), locations (green), and datatype properties (grey).</p>
 
 
 ### Capturing Textual Records and Interpretations
