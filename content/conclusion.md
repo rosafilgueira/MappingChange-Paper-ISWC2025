@@ -1,4 +1,5 @@
 ## Conclusion
+{:#conclussion}
 
 *Mapping Change* creates a temporal, semantic infrastructure for exploring Scottish place descriptions from 1803–1901. Combining LLM-based extraction, improved ontology design, and semantic search, we deliver a reusable, interoperable dataset for historical research.
 
