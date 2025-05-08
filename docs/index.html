@@ -164,9 +164,9 @@ The remainder of this paper is structured as follows. <a href="#relatedwork">Sec
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Construction and Content</h2>
 
-        <p>The MappingChange knowledge base is built through a multi-stage pipeline that transforms unstructured OCR-aligned ALTO XML files into structured DataFrames and RDF graphs. Each stage of the pipeline is modular and reproducible, with edition-specific scripts documented and openly available in the <a href="https://github.com/francesNLP/MappingChange">MappingChange GitHub repository</a>.</p>
+        <p>The <em>MappingChange</em> knowledge base is built through a multi-stage pipeline that transforms unstructured OCR-aligned ALTO XML files into structured DataFrames and RDF graphs. Each stage of the pipeline is modular and reproducible, with edition-specific scripts documented and openly available in the <a href="https://github.com/francesNLP/MappingChange">MappingChange GitHub repository</a>.</p>
 
-        <p>Of the twelve editions in the <a href="https://data.nls.uk/data/digitised-collections/gazetteers-of-scotland/">NLS collection</a>, we process ten  (See <a href="#fig-gz-vols">Figure 6</a> ) as fully descriptive gazetteers with complete metadata and volume structure. We exclude the 1828 edition, which is a town-focused summary rather than a gazetteer, and the 1848 edition, for which only Volume II is available. These ten editions form the basis of the MappingChange resource, with each transformed into a structured DataFrame containing one row per article-level entry.</p>
+        <p>Of the twelve editions in the <a href="https://data.nls.uk/data/digitised-collections/gazetteers-of-scotland/">NLS collection</a>, we process ten (see <a href="#fig-gz-vols">Figure 6</a>) as fully descriptive gazetteers with complete metadata and multi-volume structure where applicable. We exclude the 1828 edition, which is a town-focused summary rather than a gazetteer, and the 1848 edition, for which only Volume II is available. These ten editions form the basis of the MappingChange resource, which segments article-level entries from each page of OCR-aligned text. This structured segmentation enables precise extraction of place names and their descriptions—supporting downstream tasks such as cross-edition comparison, named entity linking, and interactive historical exploration.</p>
 
         <p align="center">
   <img src="images/gazetteers_vols.png" alt="Number of Gazetteer Volumes Per Year" style="max-width: 400px; height: auto; border: 1px solid #ccc;" />
@@ -175,15 +175,13 @@ The remainder of this paper is structured as follows. <a href="#relatedwork">Sec
 
         <h3 id="article-extraction-and-prompt-engineering">Article Extraction and Prompt Engineering</h3>
 
-        <p>As input to our pipeline, we use the <a href="https://drive.google.com/file/d/1J6TxdKImw2rNgmdUBN19h202gl-iYupn/view?usp=share_link">gazetteers_dataframe</a>, a cleaned and consolidated DataFrame derived from our earlier <span property="schema:citation http://purl.org/spar/cito/cites" resource="https://dx.doi.org/10.5281/zenodo.14051678"><a href="https://doi.org/10.5281/zenodo.14051678">Gazetteer_HTO knowledge graph</a></span> <span class="references">[<a href="#ref-10">10</a>]</span>. This resource contains entries from the gazetteers editions, each representing the full OCR text of a single page, along with metadata such as edition identifier, volume, page number, and candidate place names.</p>
+        <p>As input to our pipeline, we use the <a href="https://drive.google.com/file/d/1J6TxdKImw2rNgmdUBN19h202gl-iYupn/view?usp=share_link">gazetteers_dataframe</a>, a consolidated DataFrame derived from our earlier <span property="schema:citation http://purl.org/spar/cito/cites" resource="https://dx.doi.org/10.5281/zenodo.14051678"><a href="https://doi.org/10.5281/zenodo.14051678">Gazetteer_HTO knowledge graph</a></span> <span class="references">[<a href="#ref-10">10</a>]</span>. This resource contains entries from the ten selected editions, each representing the full OCR text of a page along with metadata such as edition identifier, volume, page number, and candidate place names.</p>
 
-        <p>The goal of this stage is to segment each page into distinct articles and extract structured place descriptions. This task presents several challenges: (a) place names can be ambiguous and refer to multiple locations across different editions; (b) many descriptions span multiple pages; (c) new places are introduced in later editions; (d) descriptions frequently reference other places (e.g <em>ABBEY PARISH. See Paisley.</em>), which must also be identified; and (e) places may be listed under multiple or alternative names. Our extraction scripts and prompting strategies are designed to address these complexities by isolating each named place and its corresponding description, including cross-references and aliases.</p>
+        <p>The goal of this stage is to extract structured article-level place descriptions. This task presents several challenges: (a) place names can be ambiguous or repeated across editions; (b) many descriptions span multiple pages; (c) some places are introduced only in later editions; (d) entries frequently include references to other places (e.g., <em>“See Paisley”</em>); and (e) alternative place names must be captured. Our custom GPT-4 prompts and scripts are designed to address these challenges by isolating each named place and its full contextual description, including cross-references and aliases.</p>
 
-        <p>At the core of the article segmentation process is a set of Python scripts (<code>extract_gaz_*.py</code>) that apply GPT-4 to extract article-level place descriptions from OCR text. Each edition has its own script to accommodate layout, editorial, and typographic idiosyncrasies—including abbreviation handling, redirects, and multi-page articles.</p>
+        <p>We use edition-specific Python scripts (<code>extract_gaz_*.py</code>) to segment and extract articles. Each script tailors the GPT-4 prompt to the unique typographic and editorial conventions of the edition—handling mid-page redirects, abbreviation styles, header formats, and layout variations.</p>
 
-        <p>A key part of this process is the design of GPT-4 prompts tailored to each gazetteer’s editorial conventions. The base prompt follows an instruction format asking the model to identify and extract gazetteer articles from a page of OCR text. Variants were introduced to handle structural nuances—such as distinguishing index lines from articles in early editions or handling mid-page redirects in later ones.</p>
-
-        <p>The table below summarizes the edition-specific characteristics and adaptations in the prompting strategy:</p>
+        <p>The table below summarizes key layout features and corresponding prompt adjustments:</p>
 
         <table>
           <thead>
@@ -237,27 +235,27 @@ The remainder of this paper is structured as follows. <a href="#relatedwork">Sec
           </tbody>
         </table>
 
-        <p>All scripts tokenize OCR text by page and apply the prompt in a batch-efficient manner. Outputs are parsed into structured JSON records that include article text, place name, page number, and other metadata. These are aggregated into edition-specific DataFrames.</p>
+        <p>The scripts tokenize OCR text by page, apply prompts in batch mode, and parse outputs into structured JSON files. These are then aggregated into edition-specific DataFrames—each with one row per article.</p>
 
         <h3 id="dataframes-to-rdf">DataFrames to RDF</h3>
 
-        <p>Each JSON DataFrame is cleaned and mapped to RDF using the Heritage Textual Ontology (HTO). For each article, we instantiate one or more <code>hto:Description</code> entities, annotated with quality metrics, extraction method (GPT-4), and source metadata (edition, volume, page). This conversion step is implemented using reusable mapping scripts in Python and SPARQL.</p>
+        <p>Each DataFrame is cleaned and converted to RDF using the <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a>. Each place article is represented as a <code>hto:Description</code>, annotated with quality metrics, provenance (e.g., edition, volume, page), and extraction method (GPT-4). This step is implemented using Python mapping scripts and SPARQL templates.</p>
 
         <h3 id="semantic-enrichment-and-linking">Semantic Enrichment and Linking</h3>
 
-        <p>Following RDF generation, the dataset undergoes semantic enrichment through three main procedures:</p>
+        <p>Following RDF generation, the knowledge base is semantically enriched through:</p>
 
         <ul>
-          <li><strong>Concept Clustering</strong>: Sentence embeddings and clustering algorithms group semantically similar articles across editions. Resulting <code>hto:Concept</code> instances link equivalent or evolving descriptions of the same place.</li>
-          <li><strong>Entity Linking</strong>: <code>hto:PlaceRecord</code> and <code>hto:Concept</code> instances are matched to external resources via Wikidata and DBpedia using a hybrid of embedding-based and string-matching techniques.</li>
-          <li><strong>Geospatial Annotation</strong>: Named Entity Recognition (NER) and georesolution tools (e.g., Edinburgh Geoparser) are used to annotate and disambiguate place mentions. Each resolved location is stored as a <code>hto:GeographicAnnotation</code> with coordinates, spatial type, and provenance.</li>
+          <li><strong>Concept Clustering</strong>: Sentence embeddings and clustering algorithms identify semantically related articles across editions. Resulting clusters form <code>hto:Concept</code> instances representing diachronic place descriptions.</li>
+          <li><strong>Entity Linking</strong>: Articles are linked to <a href="https://www.wikidata.org">Wikidata</a> and <a href="https://www.dbpedia.org">DBpedia</a> using hybrid embedding and string-matching approaches.</li>
+          <li><strong>Geospatial Annotation</strong>: Named entity recognition (NER) and the Edinburgh Geoparser are used to resolve and annotate place names with coordinates and place types, represented as <code>hto:GeographicAnnotation</code>.</li>
         </ul>
 
         <h3 id="knowledge-graph-serialization-and-deployment">Knowledge Graph Serialization and Deployment</h3>
 
-        <p>The final RDF outputs are serialized in Turtle and hosted in a public Fuseki SPARQL endpoint. In parallel, Elasticsearch indices are built from the JSON and RDF data to support keyword search and semantic similarity queries using embeddings.</p>
+        <p>Final outputs are serialized in RDF/Turtle and deployed via a public <a href="http://query.frances-ai.com/hto_gazetteers">Fuseki SPARQL endpoint</a>. All steps are implemented in executable Python scripts and Jupyter notebooks. Each stage is also represented in the RDF using HTO’s provenance properties (e.g., <code>prov:wasGeneratedBy</code>, <code>hto:hasTextQuality</code>), ensuring transparency and reproducibility.</p>
 
-        <p>All steps—from GPT-4 prompting to RDF generation—are documented in executable scripts and notebooks in the GitHub repository, ensuring full reproducibility. Each transformation stage is also recorded in HTO using provenance properties (<code>prov:wasGeneratedBy</code>, <code>hto:hasTextQuality</code>, etc.), enabling end-to-end traceability of every knowledge graph triple.</p>
+        <p>A pipeline overview and walkthrough are available in the <a href="https://github.com/francesNLP/MappingChange">MappingChange GitHub repository</a>, along with instructions for re-running each step. When gazetteers span multiple volumes (e.g., 1838, 1842), the outputs are merged using dedicated scripts into a single edition-level DataFrame prior to RDF conversion.</p>
 
       </div>
 </section>
