@@ -47,13 +47,15 @@
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Introduction</h2>
 
-        <p>Descriptive gazetteers were central to how 19th-century Scotland documented its geography—towns, parishes, rivers, castles, lochs, and glens—embedding each place within broader historical, economic, and social narratives. These texts evolved over the century, reflecting transformations brought about by industrialization, land reform, public health, and imperial expansion. The <em>Gazetteers of Scotland, 1803–1901</em>, digitized by the <a href="https://data.nls.uk/data/digitised-collections">National Library of Scotland (NLS)</a>, constitute one of the most comprehensive corpora for studying Scotland’s spatial knowledge in the long 19th century. The full collection comprises twenty volumes produced by different publishers and editors, and has been released as more than 13,000 high-resolution scans accompanied by <a href="https://www.loc.gov/standards/alto/">ALTO XML</a> files. These XML files encode layout and textual content extracted via Optical Character Recognition (OCR), resulting in over 1.75 million lines and 14 million words. While this makes the data technically accessible, it remains largely unsuitable for structured analysis: the texts lack article-level markup, exhibit inconsistent typographic structures, and contain significant OCR noise. Entries often begin mid-column, span multiple pages, and vary widely in format and editorial style—posing major challenges for computational processing, information retrieval, and historical reuse.</p>
+        <p>Descriptive gazetteers were a cornerstone of how 19th-century Scotland recorded and transmitted its geographical knowledge—capturing towns, parishes, rivers, castles, and natural features within evolving historical, social, and economic narratives. As industrialization, migration, land reform, and empire reshaped the country, these texts became critical instruments for documenting change. The <em>Gazetteers of Scotland, 1803–1901</em>, digitized by the <a href="https://data.nls.uk/data/digitised-collections">National Library of Scotland (NLS)</a>, form one of the most extensive corpora for studying this spatial transformation. Yet despite being released as more than 13,000 OCR-aligned ALTO XML files, the collection remains largely unsuitable for structured analysis. The lack of article-level markup, noisy layouts, and inconsistent editorial conventions limit its accessibility for digital scholarship.</p>
+
+        <p>Each edition introduces distinct typographic conventions for article headers, redirects, abbreviations, and multi-page entries. In early volumes, place names appear in uppercase with minimal punctuation to separate entries (Figure 1, left), whereas later editions use clearer formatting, including title casing and consistent delimiters (Figure 1, right). These variations complicate traditional rule-based approaches to text segmentation and alignment, making it difficult to trace how a place is described across time or to resolve recurring names that refer to different locations.</p>
 
         <p>Compounding these challenges is the fact that many place names (e.g., “ABBEY” or “GREENHILL”) recur across the gazetteers, often referring to different locations. Moreover, later editions tend to include a broader set of places, meaning some names appear for the first time in later volumes or gain more detailed descriptions over time. Disambiguating such entries is non-trivial, as it depends on contextual clues within each article rather than surface-level patterns. Our approach relies on LLM-based article segmentation and interpretation—capturing subtle editorial cues and semantic context to correctly associate each name with the appropriate description.</p>
 
-        <p><em>MappingChange</em> is the first project to construct a structured, queryable, and semantically enriched temporal knowledge base from this entire collection. We extract and align over 50,000 historical place descriptions across ten gazetteer editions, using large language models (LLMs) and volume-specific prompting strategies that are carefully tuned to editorial idiosyncrasies. The result is a knowledge base composed of three interlinked knowledge graphs: a basic graph derived from structured DataFrames; a concept-enriched graph linking semantically similar entries across editions using sentence embeddings, <a href="https://www.wikidata.org">Wikidata</a>, and <a href="https://www.dbpedia.org">DBpedia</a>; and a location-annotated graph generated through geotagging and georesolving techniques. These graphs are serialized in <a href="https://www.w3.org/RDF/">RDF</a> and modeled using the <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a>, a domain ontology we developed specifically for historical and heritage corpora.</p>
+        <p>To overcome these limitations, we present <strong>MappingChange</strong>, a reusable and openly licensed resource that transforms this historically rich but structurally fragmented corpus into a structured and semantically enriched knowledge base. Our pipeline uses large language models (LLMs) with edition-specific prompt strategies to extract over 50,000 article-level entries and express them in RDF as three interlinked knowledge graphs, modeled using the <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a>. The resulting knowledge base supports both <strong>temporal analysis</strong>, enabling comparison of how place descriptions change across editions, and <strong>semantic exploration</strong>, through the linking of conceptually related entries and connections to <a href="https://www.wikidata.org">Wikidata</a> and <a href="https://www.dbpedia.org">DBpedia</a>.</p>
 
-        <p>The complexity and variability of these sources can be seen in Figure 1, which presents the opening pages of two editions: the 1803 <em>Gazetteer of Scotland</em> and the 1884 <em>Ordnance Gazetteer of Scotland</em>. These differences, compounded across volumes, necessitate a custom approach to segmentation, prompting, and post-processing—especially since no edition includes machine-readable metadata or reliable article delimiters. Note that articles can span multiple pages, but there is no page-level indication of article continuation.</p>
+        <p>A full account of the dataset structure, file formats, and access methods is provided in <a href="#resourcedescription">Section 3</a>. All components—including JSON DataFrames, RDF knowledge graphs, and Elasticsearch indices—are made available via <a href="https://github.com/francesNLP/MappingChange">github.com/francesNLP/MappingChange</a> and integrated into the <a href="http://www.frances-ai.com">Frances</a> semantic platform, supporting FAIR access, reproducibility, and visual exploration.</p>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1em;">
   <div style="flex: 1; text-align: center;">
@@ -66,16 +68,13 @@
     <img src="images/1884-gazetteer-page.jpg" alt="First page of the 1884 Ordnance Gazetteer of Scotland" style="max-width: 200px; height: auto; border: 1px solid #ccc;" />
     <p style="font-size: 0.9em;">
         <strong>Figure 1 (right):</strong> Opening entries of the 1884 <em>Ordnance Gazetteer of Scotland</em>. This edition features a clearer visual structure, with entries formatted in title case and followed by commas. Page headers display the first and last place names on the page, both rendered in uppercase.
-
     </p>
   </div>
 </div>
 
-        <p>Of the twelve eiditions in the NLS dataset, we process ten as fully descriptive gazetteers with complete metadata and multi-volume (when applies) structure. We exclude the 1828 edition, which is a town-focused summary rather than a gazetteer, and the 1848 edition, for which only Volume II is provided by NLS. All ten processed editions are mapped into structured DataFrames, knowledge graphs, and <a href="https://www.elastic.co/">Elasticsearch</a> indices that enable full-text and vector-based semantic search. These resources are deployed via the <a href="http://www.frances-ai.com">Frances</a> semantic web platform, allowing users to explore the evolution of Scottish place descriptions through concept-timelines and visualizations. All code and data are openly available at <a href="https://github.com/francesNLP/MappingChange">github.com/francesNLP/MappingChange</a>.</p>
+        <p>By providing not only a semantically rich knowledge base but also a fully documented and modular pipeline for its construction, this work contributes to the broader goals of the Semantic Web and digital heritage. All components—DataFrames, RDF knowledge graphs, and Elasticsearch indices—are reproducible from source using openly available scripts, which are detailed in <a href="#resourceconstruction">Section 5</a>. This enables other researchers to reuse, adapt, or extend the MappingChange infrastructure for new corpora, ensuring FAIR data practices and long-term sustainability. In doing so, the project facilitates new forms of historical geography and cultural analytics by making a previously inaccessible corpus computationally interoperable, queryable, and reusable across domains.</p>
 
-        <p>This work offers a reusable digital resource that transforms a historically important but structurally inaccessible corpus into a machine-readable knowledge base for temporal, geographical, and linguistic analysis—paving the way for new forms of linked data research in cultural heritage and historical geography.</p>
-
-        <p>The remainder of this paper is structured as follows. Section 2 reviews related work on gazetteer digitization, knowledge base construction, and the use of language models for historical document processing. Section 3 introduces the Heritage Textual Ontology (HTO), including its conceptual model and alignment with other semantic vocabularies. Section 4 details the end-to-end <em>MappingChange</em> pipeline, from OCR ingestion and LLM-based segmentation to DataFrame creation and RDF serialization. Section 5 presents the construction of the three interlinked knowledge graphs and their semantic enrichment through embeddings, entity linking, and location annotation. Section 6 describes the integration of all outputs into the Frances semantic platform, highlighting search, querying, and visual exploration capabilities. Section 7 provides qualitative examples and a usage scenario illustrating how the knowledge base supports temporal and comparative analysis of Scottish place descriptions. Section 8 concludes with a summary of contributions and discusses directions for future work.</p>
+        <p>The remainder of this paper is structured as follows. <a href="#relatedwork">Section 2</a> reviews related work on gazetteer digitization, knowledge base construction, and the use of large language models for historical document processing. <a href="#resourcedescription">Section 3</a> provides a detailed description of the MappingChange resource, its components, and access mechanisms. <a href="#hto">Section 4</a> details the Heritage Textual Ontology (HTO), including its conceptual model and alignment with existing semantic vocabularies. <a href="#resourceconstruction">Section 5</a> outlines the end-to-end pipeline for extraction, cleaning, and semantic enrichment. <a href="#usage">Section 6</a> presents usage scenarios and queries that demonstrate how the resource supports historical research. Finally, <a href="#conclusion">Section 7</a> concludes with a summary of contributions and future directions.</p>
 
       </div>
 </section>
@@ -101,28 +100,22 @@
       </div>
 </section>
 
-  <section id="resource-description" inlist="" rel="schema:hasPart" resource="#resource-description">
+  <section id="resourcedescription" inlist="" rel="schema:hasPart" resource="#resourcedescription">
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Resource Description</h2>
 
-        <p><em>Mapping Change</em> includes:</p>
+        <p>The MappingChange resource provides a reusable, modular knowledge base that transforms the digitized <a href="https://data.nls.uk/data/metadata-collections/gazetteers-of-scotland/">Gazetteers of Scotland</a> (1803–1901) into a structured and semantically enriched dataset for historical place-based analysis. Central to the resource are volume-specific JSON DataFrames containing over 50,000 articles—each corresponding to a place entry—extracted from OCR-aligned ALTO XML using edition-specific GPT-4 prompts. These DataFrames include article text, identified place names, and structured metadata such as edition, volume, page number, and word count. They serve as the foundation for the construction of three interlinked RDF knowledge graphs, modeled using the <a href="https://w3id.org/hto">Heritage Textual Ontology (HTO)</a>, which captures both textual provenance and semantic transformations.</p>
 
-        <ul>
-          <li>Ten digitized Gazetteers of Scotland (1803–1901) from the <a href="https://data.nls.uk/data/metadata-collections/">NLS Digital Repository</a>.</li>
-          <li>Over 50,000 extracted articles, segmented and structured using GPT-4 prompts tailored to each volume.</li>
-          <li>Volume-specific JSON DataFrames enriched with metadata, identifiers, and embeddings.</li>
-          <li>An RDF/Turtle knowledge graph using the <a href="https://github.com/frances-ai/HeritageTextOntology">HTO ontology</a>.</li>
-          <li>Entity links to <a href="https://www.wikidata.org">Wikidata</a> and <a href="https://www.dbpedia.org">DBpedia</a>.</li>
-          <li><a href="https://www.elastic.co">Elasticsearch</a> indices supporting both keyword and vector similarity search.</li>
-          <li>Full integration with the <a href="http://www.frances-ai.com">Frances</a> semantic web platform.</li>
-        </ul>
+        <p>The first knowledge graph encodes cleaned article-level records and their bibliographic context, preserving references to their original digitized pages. The second graph introduces concept-level alignment by clustering semantically equivalent entries across editions, assigning persistent identifiers and linking them to external entities such as <a href="https://www.wikidata.org">Wikidata</a> and <a href="https://www.dbpedia.org">DBpedia</a>. The third graph adds geographic enrichment, using named entity recognition and georesolution techniques to annotate articles with location coordinates and spatial types. Together, these layers enable advanced temporal and semantic analysis of how places were described over time in the Scottish Gazetteers.</p>
 
-        <p>All code and data are publicly available via <a href="https://github.com/francesNLP/MappingChange">github.com/francesNLP/MappingChange</a>.</p>
+        <p>All knowledge graphs are serialized in RDF/Turtle and adhere to FAIR data principles. Outputs are hosted in a public Fuseki SPARQL endpoint and are complemented by a set of Elasticsearch indices that support both traditional keyword search and vector-based semantic similarity queries. These indices cover articles, concepts, and external entity links, enabling fast and flexible retrieval across editions and enrichment layers. All components are deployed within the <a href="http://www.frances-ai.com">Frances</a> semantic platform, providing users with interactive interfaces for querying, timeline visualization, and concept exploration.</p>
+
+        <p>The full resource—including DataFrames, RDF files, and search indices—is openly available at <a href="https://github.com/francesNLP/MappingChange">https:/​/​github.com/francesNLP/MappingChange</a>, with persistent identifiers to be issued via Zenodo. The <a href="https://w3id.org/hto">HTO ontology</a> is developed in an open repository under a CC-BY 4.0 license. To promote reuse and reproducibility, the repository includes modular scripts and comprehensive documentation. The step-by-step process by which these resources are constructed—including article extraction, prompt design, semantic clustering, and enrichment—is detailed in <a href="#resourceconstruction">Section 5</a>.</p>
 
       </div>
 </section>
 
-  <section id="heritage-textual-ontology" inlist="" rel="schema:hasPart" resource="#heritage-textual-ontology">
+  <section id="hto" inlist="" rel="schema:hasPart" resource="#hto">
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Heritage Textual Ontology</h2>
 
@@ -164,7 +157,7 @@
       </div>
 </section>
 
-  <section id="construction-and-content" inlist="" rel="schema:hasPart" resource="#construction-and-content">
+  <section id="resourceconstruction" inlist="" rel="schema:hasPart" resource="#resourceconstruction">
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Construction and Content</h2>
 
@@ -329,23 +322,7 @@
       </div>
 </section>
 
-  <section id="sustainability" inlist="" rel="schema:hasPart" resource="#sustainability">
-<div datatype="rdf:HTML" property="schema:description">
-        <h2 property="schema:name">Sustainability</h2>
-
-        <p>Mapping Change is designed to support long-term historical research:</p>
-
-        <ul>
-          <li><strong>Archiving</strong>: All code, data, and RDF outputs are versioned and archived on Zenodo.</li>
-          <li><strong>Ontological Reuse</strong>: The HTO ontology is maintained and extended in an open repository with permanent identifiers.</li>
-          <li><strong>Frances Platform Integration</strong>: The data is accessible through a production-ready semantic platform, ensuring ongoing usability beyond the scope of the project.</li>
-          <li><strong>Extensibility</strong>: The pipeline is modular and supports the integration of new volumes, editions, or other regional gazetteers.</li>
-        </ul>
-
-      </div>
-</section>
-
-  <section id="conclusion" inlist="" rel="schema:hasPart" resource="#conclusion">
+  <section id="conclussion" inlist="" rel="schema:hasPart" resource="#conclussion">
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Conclusion</h2>
 
