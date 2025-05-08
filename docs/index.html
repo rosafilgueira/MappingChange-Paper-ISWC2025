@@ -164,132 +164,89 @@
 <div datatype="rdf:HTML" property="schema:description">
         <h2 property="schema:name">Construction and Content</h2>
 
-        <p>The resource was built using a modular pipeline comprising:</p>
+        <p>The MappingChange knowledge base is built through a multi-stage pipeline that transforms unstructured OCR-aligned ALTO XML files into structured DataFrames and RDF graphs. Each stage of the pipeline is modular and reproducible, with edition-specific scripts documented and publicly available in the <a href="https://github.com/francesNLP/MappingChange">MappingChange GitHub repository</a>.</p>
 
-        <h3 id="extraction">Extraction</h3>
+        <h3 id="article-extraction-and-prompt-engineering">Article Extraction and Prompt Engineering</h3>
 
-        <ul>
-          <li>Volume-specific scripts (e.g., <a href="https://github.com/francesNLP/MappingChange/blob/main/src/extract_gaz_1803.py">extract_gaz_1803.py</a>) segment OCR text using GPT-4 with prompts adapted to differing article structures.</li>
-          <li>Prompts handle varying formats, including mid-page entries, redirects, and irregular headers.</li>
-        </ul>
+        <p>At the core of the article segmentation process is a set of Python scripts (<code>extract_gaz_*.py</code>) that apply GPT-4 to extract article-level place descriptions from OCR text. Each edition has its own script to accommodate layout, editorial, and typographic idiosyncrasies—including abbreviation handling, redirects, and multi-page articles.</p>
 
-        <h4 id="volume-specific-prompt-engineering">Volume-Specific Prompt Engineering</h4>
+        <p>A key part of this process is the design of GPT-4 prompts tailored to each gazetteer’s editorial conventions. The base prompt follows an instruction format asking the model to identify and extract gazetteer articles from a page of OCR text. Variants were introduced to handle structural nuances—such as distinguishing index lines from articles in early editions or handling mid-page redirects in later ones.</p>
 
-        <p>Because each Gazetteer edition between 1803 and 1901 features highly distinct layout conventions (e.g., capitalization, abbreviations, header formatting, article delimiters), we could not apply a single uniform prompt across all volumes. Instead, we designed <strong>custom GPT-4 prompts</strong> for each edition to ensure accurate article segmentation and place name extraction.</p>
-
-        <p>The table below summarizes the key differences and our adaptation strategies:</p>
+        <p>The table below summarizes the edition-specific characteristics and adaptations in the prompting strategy:</p>
 
         <table>
           <thead>
             <tr>
-              <th>Gazetteer Volume</th>
-              <th>Prompt Focus</th>
-              <th>Format Characteristics</th>
-              <th>Prompt Adaptation Strategy</th>
+              <th><strong>Edition</strong></th>
+              <th><strong>Layout/Format Features</strong></th>
+              <th><strong>Prompt Adjustments</strong></th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>1803</td>
-              <td>Entry detection in irregular formatting</td>
-              <td>Short entries, inconsistent punctuation</td>
-              <td>Prompt includes examples with minimal structure; stresses sentence-level cues for boundaries</td>
+              <td>All caps titles, minimal punctuation, mid-column entries</td>
+              <td>Prompt includes rules for semicolon-delimited entries</td>
             </tr>
             <tr>
               <td>1806</td>
-              <td>Parsing longer headers</td>
-              <td>Descriptive headers like “Parish of…”</td>
-              <td>Prompt highlights multi-word headers and requests exact header extraction</td>
+              <td>Similar to 1803 with improved spacing</td>
+              <td>Added regex pre-filters to exclude 3-letter headers</td>
             </tr>
             <tr>
               <td>1825</td>
-              <td>Delimiting fused articles</td>
-              <td>Minimal line breaks between articles</td>
-              <td>Prompt stresses lexical patterns (e.g., place types, initial caps) to find boundaries</td>
+              <td>Shorter entries, denser formatting</td>
+              <td>Emphasis on short entries and abbreviation disambiguation</td>
             </tr>
             <tr>
               <td>1838</td>
-              <td>Handling abbreviations and symbols</td>
-              <td>Use of brackets, abbreviations for counties</td>
-              <td>Prompt includes example abbreviations and instructions to include them in headers</td>
+              <td>Two-column format, clearer title separation</td>
+              <td>Prompt refined to distinguish article breaks explicitly</td>
             </tr>
             <tr>
               <td>1842</td>
-              <td>Identifying hierarchical entries</td>
-              <td>Entries with sub-places or parenthesized detail</td>
-              <td>Prompt uses hierarchical examples and specifies nested JSON structure</td>
+              <td>Redirects common, layout noisy</td>
+              <td>Includes logic for disambiguating abbreviated redirects</td>
             </tr>
             <tr>
               <td>1846</td>
-              <td>Normalizing inconsistent capitalization</td>
-              <td>Random capital words mid-paragraph</td>
-              <td>Prompt emphasizes ignoring internal caps unless followed by specific patterns</td>
+              <td>Continued abbreviation patterns, multi-page entries</td>
+              <td>Includes continuity checks and redirect expansion</td>
             </tr>
             <tr>
               <td>1868</td>
-              <td>Filtering out printed annotations</td>
-              <td>Use of special characters, side notes</td>
-              <td>Prompt includes rule to ignore marginal notes or typesetting artifacts</td>
+              <td>Longer, structured entries with location hierarchies</td>
+              <td>Added cues for nested article types and locations</td>
             </tr>
             <tr>
-              <td>1884 &amp; 1901</td>
-              <td>Unified structured prompt</td>
-              <td>Consistent bold headers, clear formatting</td>
-              <td>A single prompt applied to both; relies on standard visual patterns and separators</td>
+              <td>1884–1901</td>
+              <td>Title-cased entries, structured and clean layout</td>
+              <td>Simplified prompts; uses typographic features directly</td>
             </tr>
           </tbody>
         </table>
 
-        <p>Each prompt is represented as an instance of <code>HTO:InformationResource</code>, enabling traceable documentation of prompt design and LLM usage in our pipeline.</p>
+        <p>All scripts tokenize OCR text by page and apply the prompt in a batch-efficient manner. Outputs are parsed into structured JSON records that include article text, place name, page number, and other metadata. These are aggregated into edition-specific DataFrames.</p>
 
-        <h3 id="cleaning--deduplication">Cleaning &amp; Deduplication</h3>
+        <h3 id="dataframes-to-rdf">DataFrames to RDF</h3>
 
-        <ul>
-          <li>Cleaned JSON outputs are merged.</li>
-          <li>Fuzzy matching, prefix-trees, and substring containment detect duplicates across years and within volumes.</li>
-        </ul>
+        <p>Each JSON DataFrame is cleaned and mapped to RDF using the Heritage Textual Ontology (HTO). For each article, we instantiate one or more <code>hto:Description</code> entities, annotated with quality metrics, extraction method (GPT-4), and source metadata (edition, volume, page). This conversion step is implemented using reusable mapping scripts in Python and SPARQL.</p>
 
-        <h3 id="dataframe-generation">DataFrame Generation</h3>
+        <h3 id="semantic-enrichment-and-linking">Semantic Enrichment and Linking</h3>
 
-        <ul>
-          <li>Unified metadata from OCR, XML, and GPT outputs are exported to structured JSON-based DataFrames.</li>
-        </ul>
-
-        <h3 id="knowledge-graph-generation">Knowledge Graph Generation</h3>
+        <p>Following RDF generation, the dataset undergoes semantic enrichment through three main procedures:</p>
 
         <ul>
-          <li>RDF triples are created using the improved HTO ontology.</li>
-          <li>Entities include Articles, Volumes, Concepts, and digitization provenance.</li>
+          <li><strong>Concept Clustering</strong>: Sentence embeddings and clustering algorithms group semantically similar articles across editions. Resulting <code>hto:Concept</code> instances link equivalent or evolving descriptions of the same place.</li>
+          <li><strong>Entity Linking</strong>: <code>hto:PlaceRecord</code> and <code>hto:Concept</code> instances are matched to external resources via Wikidata and DBpedia using a hybrid of embedding-based and string-matching techniques.</li>
+          <li><strong>Geospatial Annotation</strong>: Named Entity Recognition (NER) and georesolution tools (e.g., Edinburgh Geoparser) are used to annotate and disambiguate place mentions. Each resolved location is stored as a <code>hto:GeographicAnnotation</code> with coordinates, spatial type, and provenance.</li>
         </ul>
 
-        <h3 id="entity-linking">Entity Linking</h3>
+        <h3 id="knowledge-graph-serialization-and-deployment">Knowledge Graph Serialization and Deployment</h3>
 
-        <ul>
-          <li>Gazetteer terms are matched to DBpedia and Wikidata using label and description matching.</li>
-          <li>Articles with similar embeddings are grouped into concepts using <code>all-mpnet-base-v2</code>.</li>
-        </ul>
+        <p>The final RDF outputs are serialized in Turtle and hosted in a public Fuseki SPARQL endpoint. In parallel, Elasticsearch indices are built from the JSON and RDF data to support keyword search and semantic similarity queries using embeddings.</p>
 
-        <h3 id="enrichment">Enrichment</h3>
-
-        <ul>
-          <li>Concepts are assigned summaries, sentiment values, and external links.</li>
-          <li>Article timelines visualize the evolution of place concepts across editions.</li>
-        </ul>
-
-        <h3 id="search-indices">Search Indices</h3>
-
-        <ul>
-          <li>Elasticsearch indices are built for articles, Wikidata, and DBpedia entities.</li>
-          <li>Vector search enables semantically similar article discovery.</li>
-        </ul>
-
-        <h3 id="geoparsing">Geoparsing</h3>
-
-        <ul>
-          <li>For enriched geospatial analysis, <code>geoparse.py</code> tags locations using SpaCy NER and Gazetteer context.</li>
-        </ul>
-
-        <p>All scripts are in <a href="https://github.com/francesNLP/MappingChange/tree/main/src">MappingChange/src/</a>, and their outputs are versioned and archived.</p>
+        <p>All steps—from GPT-4 prompting to RDF generation—are documented in executable scripts and notebooks in the GitHub repository, ensuring full reproducibility. Each transformation stage is also recorded in HTO using provenance properties (<code>prov:wasGeneratedBy</code>, <code>hto:hasTextQuality</code>, etc.), enabling end-to-end traceability of every knowledge graph triple.</p>
 
       </div>
 </section>
