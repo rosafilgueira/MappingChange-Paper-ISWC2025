@@ -27,7 +27,6 @@ A full account of the dataset structure, file formats, and access methods is pro
   </div>
 </div>
 
-A
 All resources presented in tis work are reproducible from source using openly available scripts, which are detailed in [Section 5](#resourceconstruction). This enables other researchers to reuse, adapt, or extend the MappingChange infrastructure for new corpora, ensuring FAIR data practices and long-term sustainability. In doing so, the project facilitates new forms of historical geography and cultural analytics by making a corpus computationally interoperable, queryable, and reusable across domains.
 
 The remainder of this paper is structured as follows. [Section 2](#relatedwork) reviews related work on Semantic Web methods for cultural heritage, including digitization, ontology design, and the use of large language model. [Section 3](#resourcedescription) provides a detailed description of the MappingChange resource. [Section 4](#hto) details the Heritage Textual Ontology. [Section 5](#resourceconstruction) outlines the end-to-end pipeline for extraction, cleaning, and semantic enrichment. [Section 6](#usage) presents usage scenarios and queries that demonstrate how the resource supports historical research. Finally, [Section 7](#conclusion) concludes with a summary of contributions and future directions.
