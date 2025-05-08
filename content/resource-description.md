@@ -1,14 +1,15 @@
 ## Resource Description
+{:#resourcedescription}
 
-*Mapping Change* includes:
+The MappingChange resource provides a reusable, modular infrastructure that transforms the digitized [Gazetteers of Scotland](https://data.nls.uk/data/metadata-collections/gazetteers-of-scotland/) (1803–1901) into a structured and semantically enriched dataset for historical place-based analysis. Central to the resource are volume-specific JSON DataFrames containing over 50,000 articles—each corresponding to a place entry—extracted from OCR-aligned ALTO XML using edition-specific GPT-4 prompts. These DataFrames include article text, article place names, and structured metadata such as edition, volume, page number, and word count, and serve as the input for the construction of three interlinked RDF knowledge graphs modeled using the [Heritage Textual Ontology (HTO)](https://w3id.org/hto).
 
-- Ten digitized Gazetteers of Scotland (1803–1901) from the [NLS Digital Repository](https://data.nls.uk/data/metadata-collections/).
-- Over 50,000 extracted articles, segmented and structured using GPT-4 prompts tailored to each volume.
-- Volume-specific JSON DataFrames enriched with metadata, identifiers, and embeddings.
-- An RDF/Turtle knowledge graph using the [HTO ontology](https://github.com/frances-ai/HeritageTextOntology).
-- Entity links to [Wikidata](https://www.wikidata.org) and [DBpedia](https://www.dbpedia.org).
-- [Elasticsearch](https://www.elastic.co) indices supporting both keyword and vector similarity search.
-- Full integration with the [Frances](http://www.frances-ai.com) semantic web platform.
 
-All code and data are publicly available via [github.com/francesNLP/MappingChange](https://github.com/francesNLP/MappingChange).
+From these DataFrames, we construct three interconnected RDF knowledge graphs, each modeled using the Heritage Textual Ontology (HTO). The first graph encodes cleaned article records and their bibliographic context. The second introduces concept-level alignment across editions by clustering semantically similar place descriptions and linking them to external entities in  [Wikidata](https://www.wikidata.org) and [DBpedia](https://www.dbpedia.org). The third graph adds geospatial enrichment through named entity recognition and georesolution, assigning latitude/longitude values and spatial types to referenced locations. Together, these graphs provide a rich, queryable representation of historical place knowledge, with full traceability to source editions and editorial transformations.
+
+The entire knowledge base is published using FAIR principles. RDF outputs are available in Turtle format and indexed in a Fuseki SPARQL endpoint. All articles and linked entities are also indexed in Elasticsearch, enabling fast retrieval by keyword or embedding-based similarity. These components are deployed within the Frances semantic platform, offering users interactive search, timeline views, and comparative exploration tools.
+
+All knowledge graphs are expressed in RDF (Turtle), published under FAIR principles, and accessible through a public Fuseki SPARQL endpoint. In addition, we generate Elasticsearch indices supporting both keyword and embedding-based similarity search. These indices and knowledge graphs are integrated into the [Frances](http://www.frances-ai.com) semantic web platform, where users can query articles, explore concept timelines, and compare place descriptions across editions using visual tools.
+
+[Elasticsearch](https://www.elastic.co) indices supporting both keyword and vector similarity search. Code, data, and documentation are publicly available via [https://github.com/francesNLP/MappingChange](https://github.com/francesNLP/MappingChange), with persistent identifiers to be issued via Zenodo. The Heritage Textual Ontology is openly developed at [https://w3id.org/hto](https://w3id.org/hto) and is licensed for reuse under CC-BY 4.0. To support adoption and reproducibility, we provide step-by-step documentation, reproducible scripts, and Google Colab notebooks for each gazetteer edition.
+
 
