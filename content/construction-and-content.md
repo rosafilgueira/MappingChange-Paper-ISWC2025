@@ -47,6 +47,6 @@ Following RDF generation, the knowledge base is semantically enriched through:
 
 Final outputs are serialized in RDF/Turtle and deployed via a public [Fuseki SPARQL endpoint](http://query.frances-ai.com/hto_gazetteers). All steps are implemented in executable Python scripts and Jupyter notebooks. Each stage is also represented in the RDF using HTO’s provenance properties (e.g., `prov:wasGeneratedBy`, `hto:hasTextQuality`), ensuring transparency and reproducibility.
 
-A pipeline overview and walkthrough are available in the [MappingChange GitHub repository](https://github.com/francesNLP/MappingChange), along with instructions for re-running each step. When gazetteers span multiple volumes (e.g., 1838, 1842), the outputs are merged using dedicated scripts into a single edition-level DataFrame prior to RDF conversion.
+A [pipeline overview](https://github.com/francesNLP/MappingChange/blob/main/pipeline_overview.png) and walkthrough are available in the MappingChange repository, along with instructions for re-running each step. When gazetteers span multiple volumes (e.g., 1838, 1842), the outputs are merged using dedicated scripts into a single edition-level DataFrame prior to RDF conversion.
 
 
