@@ -6,12 +6,12 @@ The MappingChange knowledge base is built through a multi-stage pipeline that tr
 
 
 
-Of the twelve editions in the [NLS collection](https://data.nls.uk/data/digitised-collections/gazetteers-of-scotland/), we process ten  (See Figure 6) as fully descriptive gazetteers with complete metadata and volume structure. We exclude the 1828 edition, which is a town-focused summary rather than a gazetteer, and the 1848 edition, for which only Volume II is available. These ten editions form the basis of the MappingChange resource, with each transformed into a structured DataFrame containing one row per article-level entry.
+Of the twelve editions in the [NLS collection](https://data.nls.uk/data/digitised-collections/gazetteers-of-scotland/), we process ten  (See [Figure 6](#fig-gz-vols) ) as fully descriptive gazetteers with complete metadata and volume structure. We exclude the 1828 edition, which is a town-focused summary rather than a gazetteer, and the 1848 edition, for which only Volume II is available. These ten editions form the basis of the MappingChange resource, with each transformed into a structured DataFrame containing one row per article-level entry.
 
 <p align="center">
   <img src="images/gazetteers_vols.png" alt="Number of Gazetteer Volumes Per Year" style="max-width: 400px; height: auto; border: 1px solid #ccc;" />
 </p>
-<p align="center"><strong>Figure 6:</strong> Number of volumes per gazetteer edition (1803–1901). The 1883 edition spans six volumes, while most others are single- or double-volume works.</p>
+<p align="center" id="fig-gz-vols"><strong>Figure 6:</strong> Number of volumes per gazetteer edition (1803–1901). The 1883 edition spans six volumes, while most others are single- or double-volume works.</p>
 
 
 ### Article Extraction and Prompt Engineering
