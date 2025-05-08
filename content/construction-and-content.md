@@ -1,9 +1,24 @@
 ## Construction and Content
 {:#resourceconstruction}
 
-The MappingChange knowledge base is built through a multi-stage pipeline that transforms unstructured OCR-aligned ALTO XML files into structured DataFrames and RDF graphs. Each stage of the pipeline is modular and reproducible, with edition-specific scripts documented and publicly available in the [MappingChange GitHub repository](https://github.com/francesNLP/MappingChange).
+
+The MappingChange knowledge base is built through a multi-stage pipeline that transforms unstructured OCR-aligned ALTO XML files into structured DataFrames and RDF graphs. Each stage of the pipeline is modular and reproducible, with edition-specific scripts documented and openly available in the [MappingChange GitHub repository](https://github.com/francesNLP/MappingChange).
+
+
+
+Of the twelve editions in the [NLS collection](https://data.nls.uk/data/digitised-collections/gazetteers-of-scotland/), we process ten  (See Figure 6) as fully descriptive gazetteers with complete metadata and volume structure. We exclude the 1828 edition, which is a town-focused summary rather than a gazetteer, and the 1848 edition, for which only Volume II is available. These ten editions form the basis of the MappingChange resource, with each transformed into a structured DataFrame containing one row per article-level entry.
+
+<p align="center">
+  <img src="images/gazetteers_vols.png" alt="Number of Gazetteer Volumes Per Year" style="max-width: 400px; height: auto; border: 1px solid #ccc;" />
+</p>
+<p align="center"><strong>Figure 6:</strong> Number of volumes per gazetteer edition (1803–1901). The 1883 edition spans six volumes, while most others are single- or double-volume works.</p>
+
 
 ### Article Extraction and Prompt Engineering
+
+As input to our pipeline, we use the [gazetteers_dataframe](https://drive.google.com/file/d/1J6TxdKImw2rNgmdUBN19h202gl-iYupn/view?usp=share_link), a cleaned and consolidated DataFrame derived from our earlier [Gazetteer_HTO knowledge graph](cite:cites yu_2024_14051678). This resource contains entries from the gazetteers editions, each representing the full OCR text of a single page, along with metadata such as edition identifier, volume, page number, and candidate place names.
+
+The goal of this stage is to segment each page into distinct articles and extract structured place descriptions. This task presents several challenges: (a) place names can be ambiguous and refer to multiple locations across different editions; (b) many descriptions span multiple pages; (c) new places are introduced in later editions; (d) descriptions frequently reference other places (e.g *ABBEY PARISH. See Paisley.*), which must also be identified; and (e) places may be listed under multiple or alternative names. Our extraction scripts and prompting strategies are designed to address these complexities by isolating each named place and its corresponding description, including cross-references and aliases.
 
 At the core of the article segmentation process is a set of Python scripts (`extract_gaz_*.py`) that apply GPT-4 to extract article-level place descriptions from OCR text. Each edition has its own script to accommodate layout, editorial, and typographic idiosyncrasies—including abbreviation handling, redirects, and multi-page articles.
 
