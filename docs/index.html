@@ -253,7 +253,7 @@ The remainder of this paper is structured as follows. <a href="#relatedwork">Sec
 
         <p>Final outputs are serialized in RDF/Turtle and deployed via a public <a href="http://query.frances-ai.com/hto_gazetteers">Fuseki SPARQL endpoint</a>. All steps are implemented in executable Python scripts and Jupyter notebooks. Each stage is also represented in the RDF using HTO’s provenance properties (e.g., <code>prov:wasGeneratedBy</code>, <code>hto:hasTextQuality</code>), ensuring transparency and reproducibility.</p>
 
-        <p>A pipeline overview and walkthrough are available in the <a href="https://github.com/francesNLP/MappingChange">MappingChange GitHub repository</a>, along with instructions for re-running each step. When gazetteers span multiple volumes (e.g., 1838, 1842), the outputs are merged using dedicated scripts into a single edition-level DataFrame prior to RDF conversion.</p>
+        <p>A <a href="https://github.com/francesNLP/MappingChange/blob/main/pipeline_overview.png">pipeline overview</a> and walkthrough are available in the MappingChange repository, along with instructions for re-running each step. When gazetteers span multiple volumes (e.g., 1838, 1842), the outputs are merged using dedicated scripts into a single edition-level DataFrame prior to RDF conversion.</p>
 
       </div>
 </section>
