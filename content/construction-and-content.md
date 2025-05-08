@@ -16,7 +16,7 @@ As input to our pipeline, we use the [gazetteers_dataframe](https://drive.google
 
 The goal of this stage is to extract structured article-level place descriptions. This task presents several challenges: (a) place names can be ambiguous or repeated across editions; (b) many descriptions span multiple pages; (c) some places are introduced only in later editions; (d) entries frequently include references to other places (e.g., *"See Paisley"*); and (e) alternative place names must be captured. Our custom GPT-4 prompts and scripts are designed to address these challenges by isolating each named place and its full contextual description, including cross-references and aliases.
 
-We use edition-specific Python scripts (`extract_gaz_*.py`) to segment and extract articles. Each script tailors the GPT-4 prompt to the unique typographic and editorial conventions of the edition—handling mid-page redirects, abbreviation styles, header formats, and layout variations.
+We use edition-specific Python scripts to segment and extract articles. Each script tailors the GPT-4 prompt to the unique typographic and editorial conventions of the edition—handling mid-page redirects, abbreviation styles, header formats, and layout variations.
 
 The table below summarizes key layout features and corresponding prompt adjustments:
 
