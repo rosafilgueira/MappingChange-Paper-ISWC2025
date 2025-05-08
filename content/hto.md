@@ -28,7 +28,7 @@ Records within the text are modeled using `hto:InternalRecord` (for local entiti
 
 ### Geospatial Annotations and Place Modeling
 
-In *MappingChange*, HTO has been extended to support spatial annotation and georesolution. Locations are represented as `hto:Location` and typed using subclasses such as `hto:Town`, `hto:Region`, or `hto:River`. Each place may include spatial geometries using `geo:hasGeometry` or `geo:asGeoJSON`, with optional declarations using `cidoc-crm:SP2_Declarative_Place`. This enables spatial reasoning, integration with GeoSPARQL, and alignment with modern gazetteers and linked data services. See Figure [4](#fig-hto-geo) for an overview of spatial modeling in HTO.
+In *MappingChange*, HTO has been extended to support spatial annotation and georesolution (See Figure [4](#fig-hto-geo)). Locations are represented as `hto:Location` and typed using subclasses such as `hto:Town`, `hto:Region`, or `hto:River`. Each place may include spatial geometries using `geo:hasGeometry` or `geo:asGeoJSON`, with optional declarations using `cidoc-crm:SP2_Declarative_Place`. This enables spatial reasoning, integration with GeoSPARQL, and alignment with modern gazetteers and linked data services. or an overview of spatial modeling in HTO.
 
 <p align="center">
   <img src="images/Geospatial.png" alt="HTO geospatial modeling" width="400px" />
